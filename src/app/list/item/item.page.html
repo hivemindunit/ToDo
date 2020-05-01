@@ -6,16 +6,16 @@
 <ion-content>
   <ion-list lines="true">
     <ion-item>
-      <ion-label color="primary">ToDo Title </ion-label>
-      <ion-input placeholder="title" [(ngModel)]="item.title"></ion-input>
+      <ion-label color="primary" position="floating">Title</ion-label>
+      <ion-input [(ngModel)]="item.title"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label color="primary">ToDo Description </ion-label>
-      <ion-input placeholder="description" [(ngModel)]="item.description"></ion-input>
+      <ion-label color="primary" position="floating">Description</ion-label>
+      <ion-input [(ngModel)]="item.description"></ion-input>
     </ion-item>
   </ion-list>
 </ion-content>
 <ion-footer>
-  <ion-button class="save-btn" (click)="save()">Save</ion-button>
-  <ion-button class="dismiss-btn" (click)="cancel()">Cancel</ion-button>
+  <ion-button (click)="save()" color="primary">Save</ion-button>
+  <ion-button (click)="cancel()" color="warning">Cancel</ion-button>
 </ion-footer>
