@@ -21,7 +21,6 @@ export class ListPage implements OnInit, AfterContentInit {
   // including AuthGuardService here so that it's available to listen to auth events
   authService: AuthGuard;
 
-
   constructor(public modalController: ModalController, public events: Events, public guard: AuthGuard) {
     this.authState = { loggedIn: false };
     this.authService = guard;
@@ -72,16 +71,18 @@ export class ListPage implements OnInit, AfterContentInit {
       component: ItemPage,
       componentProps: props
     });
-    // Listen for the modal to be closed...
-    this.modal.onDidDismiss((result) => {
-      if (result.data.newItem) {
-        // ...and add a new item if modal passes back newItem
-        result.data.itemList.items.push(result.data.newItem);
-      } else if (result.data.editItem) {
-        // ...or splice the items array if the modal passes back editItem
-        result.data.itemList.items[i] = result.data.editItem;
+    this.modal.onDidDismiss().then((result) => {
+      if (result !== null) {
+          console.log('modal closed');
+          if (result.data.newItem) {
+            // ...and add a new item if modal passes back newItem
+            result.data.itemList.items.push(result.data.newItem);
+          } else if (result.data.editItem) {
+            // ...or splice the items array if the modal passes back editItem
+            result.data.itemList.items[i] = result.data.editItem;
+          }
+          this.save(result.data.itemList);
       }
-      this.save(result.data.itemList);
     });
     return this.modal.present();
   }
@@ -98,7 +99,10 @@ export class ListPage implements OnInit, AfterContentInit {
 
   save(list) {
     // Use AWS Amplify to save the list...
-    // this.itemList = list;
+    this.modal.dismiss({
+      'dismissed': true
+    });
+    this.itemList = list;
   }
 
   getItems() {
