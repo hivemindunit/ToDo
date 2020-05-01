@@ -10,6 +10,7 @@ import {AuthGuard} from '../auth.guard';
   templateUrl: 'list.page.html',
   styleUrls: ['list.page.scss']
 })
+
 export class ListPage implements OnInit, AfterContentInit {
   modal: any;
   data: any;
@@ -26,8 +27,6 @@ export class ListPage implements OnInit, AfterContentInit {
     this.authService = guard;
     // Listen for changes to the AuthState in order to change item list appropriately
     events.subscribe('data:AuthState', async (data: any) => {
-      // console.log('auth state changed, loggedIn:');
-      // console.log(data.loggedIn);
       if (data.loggedIn) {
         this.getItems();
       } else {
