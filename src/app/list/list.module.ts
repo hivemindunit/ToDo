@@ -2,10 +2,11 @@ import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Tab1Page } from './tab1.page';
+import { ListPage } from './list.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 
-import { Tab1PageRoutingModule } from './tab1-routing.module';
+import { ListPageRoutingModule } from './list-routing.module';
+import { ItemPage } from './item/item.page';
 
 @NgModule({
   imports: [
@@ -13,8 +14,13 @@ import { Tab1PageRoutingModule } from './tab1-routing.module';
     CommonModule,
     FormsModule,
     ExploreContainerComponentModule,
-    Tab1PageRoutingModule
+    ListPageRoutingModule
   ],
-  declarations: [Tab1Page]
+  declarations: [ListPage, ItemPage],
+  entryComponents: [
+    ListPage,
+    ItemPage
+  ],
+  providers: []
 })
-export class Tab1PageModule {}
+export class ListPageModule {}

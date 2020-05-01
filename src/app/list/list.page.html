@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title *ngIf="user">User</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="modify(null, null)">Add Item</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content padding>
+  <ion-button (click)="login()">Login</ion-button>
+  <ion-button (click)="logout()">Logout</ion-button>
+  Logged In?
+</ion-content>
+<ion-content *ngIf="itemList">
+  <ion-card *ngFor="let item of itemList.items; index as i">
+      <ion-item>
+        <ion-label class="hover card-title" (click)="modify(item, i)">{{item.title}}</ion-label>
+        <ion-button fill="outline" slot="end" (click)="delete(i)">
+          <ion-icon name="trash" size="small"></ion-icon>
+          Delete
+        </ion-button>
+        <ion-button fill="outline" slot="end" (click)="complete(i)">
+          <ion-icon name="checkmark-circle" size="small" [ngClass]="{'complete': item.status=='complete'}"></ion-icon>
+          Complete
+        </ion-button>
+      </ion-item>
+      <ion-card-content class="hover card-title" (click)="modify(item, i)">
+        {{item.description}}
+      </ion-card-content>
+  </ion-card>
+</ion-content>
