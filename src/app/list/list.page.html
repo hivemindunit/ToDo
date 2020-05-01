@@ -13,11 +13,9 @@
         <ion-label class="hover card-title" (click)="modify(item, i)">{{item.title}}</ion-label>
         <ion-button fill="outline" slot="end" (click)="delete(i)">
           <ion-icon name="trash" size="small"></ion-icon>
-          Delete
         </ion-button>
         <ion-button fill="outline" slot="end" (click)="complete(i)">
           <ion-icon name="checkmark-circle" size="small" [ngClass]="{'complete': item.status=='complete'}"></ion-icon>
-          Complete
         </ion-button>
       </ion-item>
       <ion-card-content class="hover card-title" (click)="modify(item, i)">
@@ -26,6 +24,6 @@
   </ion-card>
   <ion-button expand="block" (click)="modify(null, null)">
     <ion-icon slot="start" name="add"></ion-icon>
-    Block Button
+    Add a task
   </ion-button>
 </ion-content>
