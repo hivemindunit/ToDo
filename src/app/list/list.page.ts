@@ -40,30 +40,10 @@ export class ListPage implements OnInit, AfterContentInit {
           this.authState.loggedIn = authState.state === 'signedIn';
           this.events.publish('data:AuthState', this.authState);
         });
-    // events.subscribe('data:AuthState', async (data: any) => {
-    //   if (data.loggedIn) {
-    //     this.user = await this.amplifyService.auth().currentUserInfo();
-    //     this.getItems();
-    //   } else {
-    //     this.itemList.items = [];
-    //   }
-    // });
   }
 
   ngAfterContentInit() {
     this.events.publish('data:AuthState', this.authState);
-  }
-
-  login() {
-    this.authState.loggedIn = true;
-    this.events.publish('data:AuthState', this.authState);
-    console.log(this.authState);
-  }
-
-  logout() {
-    this.authState.loggedIn = false;
-    this.events.publish('data:AuthState', this.authState);
-    console.log(this.authState);
   }
 
   async ngOnInit() {
@@ -71,7 +51,7 @@ export class ListPage implements OnInit, AfterContentInit {
     // Use AWS Amplify to get user data when creating items
     this.user = await this.amplifyService.auth().currentUserInfo();
     const res = await API.graphql(graphqlOperation(queries.listTodos));
-    console.log(res);
+    // console.log(res);
     this.itemList = {
       userId: this.user.userId,
       // @ts-ignore
@@ -114,7 +94,9 @@ export class ListPage implements OnInit, AfterContentInit {
               }
             }));
           }
-          this.save(result.data.itemList);
+          this.modal.dismiss({
+            dismissed: true
+          });
       }
     });
     return this.modal.present();
@@ -138,36 +120,5 @@ export class ListPage implements OnInit, AfterContentInit {
         status: item.status
       }
     }));
-    // this.save(this.itemList);
   }
-
-  save(list) {
-    // Use AWS Amplify to save the list...
-    console.log('saving...');
-    console.log(list);
-    this.modal.dismiss({
-      dismissed: true
-    });
-    this.itemList = list;
-  }
-
-  // async getItems() {
-  //   this.itemList = {
-  //     userId: 1,
-  //     items: [
-  //       new ToDoItem({
-  //         id: '1',
-  //         title: 'test item 1',
-  //         description: 'my test item',
-  //         status: 'complete'
-  //       }),
-  //       new ToDoItem({
-  //         id: '2',
-  //         title: 'test item 3',
-  //         description: 'my other test item',
-  //         status: 'pending'
-  //       })
-  //     ]
-  //   };
-  // }
 }
