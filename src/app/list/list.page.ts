@@ -3,7 +3,10 @@ import { ModalController } from '@ionic/angular';
 import { ToDoItem, ToDoList } from '../classes/item.class';
 import { Events } from '../events.service';
 import { ItemPage } from './item/item.page';
-import {AuthGuard} from '../auth.guard';
+import { AuthGuard } from '../auth.guard';
+import { AmplifyService } from 'aws-amplify-angular';
+import { API, graphqlOperation } from 'aws-amplify';
+import * as queries from '../../graphql/queries';
 
 @Component({
   selector: 'app-list-page',
@@ -21,18 +24,29 @@ export class ListPage implements OnInit, AfterContentInit {
   authState: any;
   // including AuthGuardService here so that it's available to listen to auth events
   authService: AuthGuard;
+  amplifyService: AmplifyService;
 
-  constructor(public modalController: ModalController, public events: Events, public guard: AuthGuard) {
+  constructor(public modalController: ModalController,
+              public events: Events,
+              public guard: AuthGuard,
+              public amplify: AmplifyService) {
     this.authState = { loggedIn: false };
     this.authService = guard;
+    this.amplifyService = amplify;
     // Listen for changes to the AuthState in order to change item list appropriately
-    events.subscribe('data:AuthState', async (data: any) => {
-      if (data.loggedIn) {
-        this.getItems();
-      } else {
-        this.itemList.items = [];
-      }
-    });
+    this.amplifyService.authStateChange$
+        .subscribe(authState => {
+          this.authState.loggedIn = authState.state === 'signedIn';
+          this.events.publish('data:AuthState', this.authState);
+        });
+    // events.subscribe('data:AuthState', async (data: any) => {
+    //   if (data.loggedIn) {
+    //     this.user = await this.amplifyService.auth().currentUserInfo();
+    //     this.getItems();
+    //   } else {
+    //     this.itemList.items = [];
+    //   }
+    // });
   }
 
   ngAfterContentInit(){
@@ -52,7 +66,15 @@ export class ListPage implements OnInit, AfterContentInit {
   }
 
   async ngOnInit() {
-    this.getItems();
+    // this.getItems();
+    // Use AWS Amplify to get user data when creating items
+    this.user = await this.amplifyService.auth().currentUserInfo();
+    const res = await API.graphql(graphqlOperation(queries.listTodos));
+    console.log(res);
+    this.itemList = {
+      userId: this.user.userId,
+      items: res.data.listTodos.items
+    };
   }
 
   async modify(item, i) {
@@ -88,23 +110,25 @@ export class ListPage implements OnInit, AfterContentInit {
 
   delete(i) {
     this.itemList.items.splice(i, 1);
-    // this.save(this.itemList);
+    this.save(this.itemList);
   }
 
   complete(i) {
     this.itemList.items[i].status = 'complete';
-    // this.save(this.itemList);
+    this.save(this.itemList);
   }
 
   save(list) {
     // Use AWS Amplify to save the list...
+    console.log('saving...');
+    console.log(list);
     this.modal.dismiss({
-      'dismissed': true
+      dismissed: true
     });
     this.itemList = list;
   }
 
-  getItems() {
+  async getItems() {
     this.itemList = {
       userId: 1,
       items: [

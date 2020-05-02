@@ -1,10 +1,11 @@
 <ion-header>
   <ion-toolbar>
     <ion-title *ngIf="user">User</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="login()">Login</ion-button>
-      <ion-button (click)="logout()">Logout</ion-button>
-    </ion-buttons>
+<!--    <ion-buttons slot="end">-->
+<!--      <ion-button (click)="login()">Login</ion-button>-->
+<!--      <ion-button (click)="logout()">Logout</ion-button>-->
+<!--    </ion-buttons>-->
+    <amplify-authenticator framework="ionic"></amplify-authenticator>
   </ion-toolbar>
 </ion-header>
 <ion-content>

@@ -7,6 +7,7 @@ import { ExploreContainerComponentModule } from '../explore-container/explore-co
 
 import { ListPageRoutingModule } from './list-routing.module';
 import { ItemPage } from './item/item.page';
+import { AmplifyAngularModule, AmplifyIonicModule, AmplifyService } from 'aws-amplify-angular';
 
 @NgModule({
   imports: [
@@ -14,13 +15,15 @@ import { ItemPage } from './item/item.page';
     CommonModule,
     FormsModule,
     ExploreContainerComponentModule,
-    ListPageRoutingModule
+    ListPageRoutingModule,
+    AmplifyAngularModule,
+    AmplifyIonicModule
   ],
   declarations: [ListPage, ItemPage],
   entryComponents: [
     ListPage,
     ItemPage
   ],
-  providers: []
+  providers: [AmplifyService]
 })
 export class ListPageModule {}
