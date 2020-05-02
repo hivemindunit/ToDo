@@ -7,6 +7,7 @@ import { AuthGuard } from '../auth.guard';
 import { AmplifyService } from 'aws-amplify-angular';
 import { API, graphqlOperation } from 'aws-amplify';
 import * as queries from '../../graphql/queries';
+import * as mutations from '../../graphql/mutations';
 
 @Component({
   selector: 'app-list-page',
@@ -49,7 +50,7 @@ export class ListPage implements OnInit, AfterContentInit {
     // });
   }
 
-  ngAfterContentInit(){
+  ngAfterContentInit() {
     this.events.publish('data:AuthState', this.authState);
   }
 
@@ -73,12 +74,13 @@ export class ListPage implements OnInit, AfterContentInit {
     console.log(res);
     this.itemList = {
       userId: this.user.userId,
+      // @ts-ignore
       items: res.data.listTodos.items
     };
   }
 
   async modify(item, i) {
-    let props = {
+    const props = {
       itemList: this.itemList,
       /*
         We pass in an item parameter only when the user clicks on an existing item
@@ -98,9 +100,19 @@ export class ListPage implements OnInit, AfterContentInit {
           if (result.data.newItem) {
             // ...and add a new item if modal passes back newItem
             result.data.itemList.items.push(result.data.newItem);
+            API.graphql(graphqlOperation(mutations.createTodo, {input: result.data.newItem}));
           } else if (result.data.editItem) {
             // ...or splice the items array if the modal passes back editItem
             result.data.itemList.items[i] = result.data.editItem;
+            // tslint:disable-next-line:no-shadowed-variable
+            const item = result.data.editItem;
+            API.graphql(graphqlOperation(mutations.updateTodo, {
+              input: {
+                id: item.id,
+                title: item.title,
+                description: item.description
+              }
+            }));
           }
           this.save(result.data.itemList);
       }
@@ -108,14 +120,25 @@ export class ListPage implements OnInit, AfterContentInit {
     return this.modal.present();
   }
 
-  delete(i) {
+  async delete(i) {
+    // console.log('delete');
+    // console.log(i);
+    const item = this.itemList.items[i];
     this.itemList.items.splice(i, 1);
-    this.save(this.itemList);
+    // console.log(item);
+    API.graphql(graphqlOperation(mutations.deleteTodo, {input: { id: item.id }}));
   }
 
-  complete(i) {
+  async complete(i) {
     this.itemList.items[i].status = 'complete';
-    this.save(this.itemList);
+    const item = this.itemList.items[i];
+    API.graphql(graphqlOperation(mutations.updateTodo, {
+      input: {
+        id: item.id,
+        status: item.status
+      }
+    }));
+    // this.save(this.itemList);
   }
 
   save(list) {
@@ -128,23 +151,23 @@ export class ListPage implements OnInit, AfterContentInit {
     this.itemList = list;
   }
 
-  async getItems() {
-    this.itemList = {
-      userId: 1,
-      items: [
-        new ToDoItem({
-          id: '1',
-          title: 'test item 1',
-          description: 'my test item',
-          status: 'complete'
-        }),
-        new ToDoItem({
-          id: '2',
-          title: 'test item 3',
-          description: 'my other test item',
-          status: 'pending'
-        })
-      ]
-    };
-  }
+  // async getItems() {
+  //   this.itemList = {
+  //     userId: 1,
+  //     items: [
+  //       new ToDoItem({
+  //         id: '1',
+  //         title: 'test item 1',
+  //         description: 'my test item',
+  //         status: 'complete'
+  //       }),
+  //       new ToDoItem({
+  //         id: '2',
+  //         title: 'test item 3',
+  //         description: 'my other test item',
+  //         status: 'pending'
+  //       })
+  //     ]
+  //   };
+  // }
 }
