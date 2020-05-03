@@ -8,6 +8,7 @@ import { AmplifyService } from 'aws-amplify-angular';
 import { API, graphqlOperation } from 'aws-amplify';
 import * as queries from '../../graphql/queries';
 import * as mutations from '../../graphql/mutations';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-list-page',
@@ -30,7 +31,8 @@ export class ListPage implements OnInit, AfterContentInit {
   constructor(public modalController: ModalController,
               public events: Events,
               public guard: AuthGuard,
-              public amplify: AmplifyService) {
+              public amplify: AmplifyService,
+              private router: Router) {
     this.authState = { loggedIn: false };
     this.authService = guard;
     this.amplifyService = amplify;
@@ -50,13 +52,16 @@ export class ListPage implements OnInit, AfterContentInit {
     // this.getItems();
     // Use AWS Amplify to get user data when creating items
     this.user = await this.amplifyService.auth().currentUserInfo();
-    const res = await API.graphql(graphqlOperation(queries.listTodos));
-    // console.log(res);
-    this.itemList = {
-      userId: this.user.userId,
-      // @ts-ignore
-      items: res.data.listTodos.items
-    };
+    if (this.user == null) {
+      this.router.navigate(['/auth']);
+    } else {
+      const res = await API.graphql(graphqlOperation(queries.listTodos));
+      this.itemList = {
+        userId: this.user.userId,
+        // @ts-ignore
+        items: res.data.listTodos.items
+      };
+    }
   }
 
   async modify(item, i) {
@@ -76,7 +81,6 @@ export class ListPage implements OnInit, AfterContentInit {
     });
     this.modal.onDidDismiss().then((result) => {
       if (result !== null) {
-          console.log('modal closed');
           if (result.data.newItem) {
             // ...and add a new item if modal passes back newItem
             result.data.itemList.items.push(result.data.newItem);
@@ -120,5 +124,10 @@ export class ListPage implements OnInit, AfterContentInit {
         status: item.status
       }
     }));
+  }
+
+  signOut() {
+    this.amplifyService.auth().signOut();
+    this.router.navigate(['/auth']);
   }
 }
