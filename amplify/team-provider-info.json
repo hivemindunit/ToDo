@@ -13,10 +13,7 @@
         },
         "categories": {
             "auth": {
-                "todotogether13f1772f": {
-                    "googleClientId": "743294652736-hgoe0gha8hljbt4gha5lf3vsp2mqu0vc.apps.googleusercontent.com",
-                    "hostedUIProviderCreds": "[{\"ProviderName\":\"Google\",\"client_id\":\"743294652736-hgoe0gha8hljbt4gha5lf3vsp2mqu0vc.apps.googleusercontent.com\",\"client_secret\":\"xFhNXn92BbP7e532ssOIcdoD\"}]"
-                }
+                "todotogether13f1772f": {}
             },
             "function": {
                 "todotogether13f1772fCreateAuthChallenge": {},

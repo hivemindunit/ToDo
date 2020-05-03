@@ -22,7 +22,7 @@ export class AuthPage implements OnInit {
   onAuthEvent(payload) {
     console.log(payload);
     if (payload.event === 'signIn') {
-      this.router.navigateByUrl('tabs/list');
+      this.router.navigateByUrl('/');
     }
   }
 }
