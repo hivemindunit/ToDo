@@ -4,7 +4,7 @@
     "resourceNameTruncated": "todoto13f1772f",
     "userPoolName": "todotogether13f1772f_userpool_13f1772f",
     "autoVerifiedAttributes": [
-        "email"
+        "phone_number"
     ],
     "mfaConfiguration": "OFF",
     "mfaTypes": [
@@ -44,11 +44,24 @@
             "Arn"
         ]
     },
-    "useDefault": "default",
+    "useDefault": "manual",
     "usernameAttributes": [
         "phone_number"
     ],
     "userPoolGroupList": [],
     "dependsOn": [],
-    "hostedUI": true
+    "hostedUI": true,
+    "hostedUIDomainName": "todotogether60264de9-60264de9",
+    "authProvidersUserPool": [],
+    "hostedUIProviderMeta": "[]",
+    "thirdPartyAuth": true,
+    "authProviders": [],
+    "userPoolGroups": false,
+    "adminQueries": false,
+    "triggers": "{}",
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"http://localhost:4200/\"],\"LogoutURLs\":[\"http://localhost:4200/\"]}",
+    "parentStack": {
+        "Ref": "AWS::StackId"
+    },
+    "permissions": []
 }

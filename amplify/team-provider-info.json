@@ -12,14 +12,16 @@
             "AmplifyAppId": "d405jj7qg3l0t"
         },
         "categories": {
-            "auth": {
-                "todotogether13f1772f": {}
-            },
             "function": {
-                "todotogether13f1772fCreateAuthChallenge": {},
+                "todotogether13f1772fCreateAuthChallenge": {
+                    "CHALLENGEANSWER": ""
+                },
                 "todotogether13f1772fDefineAuthChallenge": {},
-                "todotogether13f1772fVerifyAuthChallengeResponse": {
-                    "RECAPTCHASECRET": ""
+                "todotogether13f1772fVerifyAuthChallengeResponse": {}
+            },
+            "auth": {
+                "todotogether13f1772f": {
+                    "hostedUIProviderCreds": "[]"
                 }
             }
         }

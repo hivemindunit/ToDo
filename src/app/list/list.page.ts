@@ -139,4 +139,9 @@ export class ListPage implements OnInit, AfterContentInit {
         this.amplifyService.auth().signOut();
         this.router.navigate(['/auth']);
     }
+
+    // toggleDarkMode() {
+    //     console.log('dark!');
+    //     document.body.classList.toggle('dark');
+    // }
 }
