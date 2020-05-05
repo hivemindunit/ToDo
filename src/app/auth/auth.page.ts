@@ -23,7 +23,6 @@ export class AuthPage implements OnInit {
     }
 
     onAuthEvent(payload) {
-        console.log(payload);
         if (payload.event === 'signIn') {
             this.router.navigateByUrl('/');
         }
@@ -34,7 +33,7 @@ export class AuthPage implements OnInit {
             message: 'Please wait...'
         });
         await loading.present();
-        Auth.signIn(form.controls.email.value, form.controls.password.value).then((result) => {
+        Auth.signIn(form.controls.phone.value.toString(), form.controls.password.value.toString()).then((result) => {
             loading.dismiss();
             this.validationError = null;
         }).catch(error => {

@@ -8,6 +8,14 @@ const routes: Routes = [
   {
     path: '',
     component: AuthPage
+  },
+  {
+    path: 'register',
+    redirectTo: '/register'
+  },
+  {
+    path: 'restore-access',
+    redirectTo: '/restore-access'
   }
 ];
 

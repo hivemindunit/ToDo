@@ -1,0 +1,107 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+        <ion-title>Register</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row *ngIf="!codeSent" class="ion-justify-content-center">
+      <ion-col size-md="4">
+        <form #form="ngForm" (ngSubmit)="register(form)" method="post">
+          <ion-list lines="full" class="ion-no-margin ion-no-padding">
+            <ion-item>
+              <ion-label position="floating">Phone number
+                <ion-text color="danger">*</ion-text>
+              </ion-label>
+              <ion-input required ngModel type="phone" name="phone"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Email
+                <ion-text color="danger">*</ion-text>
+              </ion-label>
+              <ion-input required ngModel type="email" name="email"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Password
+                <ion-text color="danger">*</ion-text>
+              </ion-label>
+              <ion-input required ngModel type="password" name="password"></ion-input>
+            </ion-item>
+          </ion-list>
+          <div class="ion-padding">
+            <ion-button expand="block" type="submit" class="ion-no-margin">Create account</ion-button>
+          </div>
+        </form>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-justify-content-center" *ngIf="codeSent && codeSentTo.length > 0">
+      <ion-col size-md="4">
+        <div class="ion-text-center">
+          <ion-chip>
+            <ion-label>Confirmation code is sent to {{codeSentTo}}</ion-label>
+          </ion-chip>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="codeSent" class="ion-justify-content-center">
+      <ion-col size-md="4">
+        <form #form="ngForm" (ngSubmit)="confirm(form)" method="post">
+          <ion-list lines="full" class="ion-no-margin ion-no-padding">
+            <ion-item>
+              <ion-label position="floating">Phone number
+                <ion-text color="danger">*</ion-text>
+              </ion-label>
+              <ion-input required ngModel [(ngModel)]="username" type="phone" name="phone"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Code
+                <ion-text color="danger">*</ion-text>
+              </ion-label>
+              <ion-input required ngModel type="number" name="code"></ion-input>
+            </ion-item>
+          </ion-list>
+          <div class="ion-padding">
+            <ion-button expand="block" type="submit" class="ion-no-margin">Confirm account</ion-button>
+          </div>
+        </form>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-justify-content-center" *ngIf="this.validationError">
+      <ion-col size-md="4">
+        <div class="ion-text-center">
+          <ion-chip>
+            <ion-label color="danger">{{validationError}}</ion-label>
+          </ion-chip>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="!codeSent" class="ion-justify-content-center">
+      <ion-col size-md="4">
+        <div class="ion-text-center">
+          <p>Have a code?</p>
+          <ion-button size="small" fill="outline" (click)="this.codeSent = true;">Confirm</ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="codeSent" class="ion-justify-content-center">
+      <ion-col size-md="4">
+        <div class="ion-text-center">
+          <p>Lost your code?</p>
+          <ion-button size="small" fill="outline" (click)="resendCode()">Resend</ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-justify-content-center">
+      <ion-col size-md="4">
+        <div class="ion-text-center">
+          <p>Have an account?</p>
+          <ion-button expand="block" color="success" [routerLink]="['/auth']">Sign in</ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
