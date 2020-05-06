@@ -1,7 +1,7 @@
 import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { ListPage } from './list.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 
@@ -10,15 +10,16 @@ import { ItemPage } from './item/item.page';
 import { AmplifyAngularModule, AmplifyIonicModule, AmplifyService } from 'aws-amplify-angular';
 
 @NgModule({
-  imports: [
-    IonicModule,
-    CommonModule,
-    FormsModule,
-    ExploreContainerComponentModule,
-    ListPageRoutingModule,
-    AmplifyAngularModule,
-    AmplifyIonicModule
-  ],
+    imports: [
+        IonicModule,
+        CommonModule,
+        FormsModule,
+        ExploreContainerComponentModule,
+        ListPageRoutingModule,
+        AmplifyAngularModule,
+        AmplifyIonicModule,
+        ReactiveFormsModule
+    ],
   declarations: [ListPage, ItemPage],
   entryComponents: [
     ListPage,

@@ -14,14 +14,17 @@
           <p>Reset your password</p>
           <p>You will receive a verification code to reset your password</p>
         </div>
-        <form #form="ngForm" (ngSubmit)="submit(form)" method="post">
+        <form [formGroup]="restoreAccessForm" (ngSubmit)="submit()" novalidate>
           <ion-list lines="full" class="ion-no-margin ion-no-padding">
             <ion-item>
               <ion-label position="floating">Phone
                 <ion-text color="danger">*</ion-text>
               </ion-label>
-              <ion-input required ngModel [(ngModel)]="username" type="phone" name="phone"></ion-input>
+              <ion-input type="phone" formControlName="phone"></ion-input>
             </ion-item>
+            <ion-text color="danger" *ngIf="isSubmitted && restoreAccessFormErrorControl.phone.errors?.required">
+              <sub>Phone is required</sub>
+            </ion-text>
           </ion-list>
           <div class="ion-padding">
             <ion-button expand="block" type="submit" class="ion-no-margin">Submit</ion-button>
@@ -35,26 +38,35 @@
           <p>Reset your password</p>
           <p>You will receive a verification code to reset your password</p>
         </div>
-        <form #form="ngForm" (ngSubmit)="verify(form)" method="post">
+        <form [formGroup]="verifyForm" (ngSubmit)="verify()" novalidate>
           <ion-list lines="full" class="ion-no-margin ion-no-padding">
             <ion-item>
               <ion-label position="floating">Phone
                 <ion-text color="danger">*</ion-text>
               </ion-label>
-              <ion-input required ngModel [(ngModel)]="username" type="phone" name="phone"></ion-input>
+              <ion-input type="phone" formControlName="phone"></ion-input>
             </ion-item>
+            <ion-text color="danger" *ngIf="isSubmitted && verifyFormErrorControl.phone.errors?.required">
+              <sub>Phone is required</sub>
+            </ion-text>
             <ion-item>
               <ion-label position="floating">Code
                 <ion-text color="danger">*</ion-text>
               </ion-label>
-              <ion-input required ngModel type="number" name="code"></ion-input>
+              <ion-input type="number" formControlName="code"></ion-input>
             </ion-item>
+            <ion-text color="danger" *ngIf="isSubmitted && verifyFormErrorControl.code.errors?.required">
+              <sub>Code is required</sub>
+            </ion-text>
             <ion-item>
             <ion-label position="floating">Password
               <ion-text color="danger">*</ion-text>
             </ion-label>
-            <ion-input required ngModel type="password" name="password"></ion-input>
+            <ion-input type="password" formControlName="password"></ion-input>
           </ion-item>
+            <ion-text color="danger" *ngIf="isSubmitted && verifyFormErrorControl.password.errors?.required">
+              <sub>Password is required</sub>
+            </ion-text>
           </ion-list>
           <div class="ion-padding">
             <ion-button expand="block" type="submit" class="ion-no-margin">Submit</ion-button>
@@ -71,14 +83,6 @@
         </div>
       </ion-col>
     </ion-row>
-<!--    <ion-row class="ion-justify-content-center">-->
-<!--      <ion-col size-md="4">-->
-<!--        <div class="ion-text-center">-->
-<!--          <p>Have an account?</p>-->
-<!--          <ion-button expand="block" color="success" [routerLink]="['/auth']">Sign In</ion-button>-->
-<!--        </div>-->
-<!--      </ion-col>-->
-<!--    </ion-row>-->
     <ion-row class="ion-justify-content-center">
       <ion-col size-md="4">
         <div class="ion-text-center">

@@ -11,26 +11,35 @@
   <ion-grid>
     <ion-row *ngIf="!codeSent" class="ion-justify-content-center">
       <ion-col size-md="4">
-        <form #form="ngForm" (ngSubmit)="register(form)" method="post">
+        <form [formGroup]="registerForm" (ngSubmit)="register()" novalidate>
           <ion-list lines="full" class="ion-no-margin ion-no-padding">
             <ion-item>
               <ion-label position="floating">Phone number
                 <ion-text color="danger">*</ion-text>
               </ion-label>
-              <ion-input required ngModel type="phone" name="phone"></ion-input>
+              <ion-input type="phone" formControlName="phone"></ion-input>
             </ion-item>
+            <ion-text color="danger" *ngIf="isSubmitted && registerFormErrorControl.phone.errors?.required">
+              <sub>Phone is required</sub>
+            </ion-text>
             <ion-item>
               <ion-label position="floating">Email
                 <ion-text color="danger">*</ion-text>
               </ion-label>
-              <ion-input required ngModel type="email" name="email"></ion-input>
+              <ion-input type="email" formControlName="email"></ion-input>
             </ion-item>
+            <ion-text color="danger" *ngIf="isSubmitted && registerFormErrorControl.email.errors?.required">
+              <sub>Email is required</sub>
+            </ion-text>
             <ion-item>
               <ion-label position="floating">Password
                 <ion-text color="danger">*</ion-text>
               </ion-label>
-              <ion-input required ngModel type="password" name="password"></ion-input>
+              <ion-input type="password" formControlName="password"></ion-input>
             </ion-item>
+            <ion-text color="danger" *ngIf="isSubmitted && registerFormErrorControl.password.errors?.required">
+              <sub>Password is required</sub>
+            </ion-text>
           </ion-list>
           <div class="ion-padding">
             <ion-button expand="block" type="submit" class="ion-no-margin">Create account</ion-button>
@@ -49,19 +58,22 @@
     </ion-row>
     <ion-row *ngIf="codeSent" class="ion-justify-content-center">
       <ion-col size-md="4">
-        <form #form="ngForm" (ngSubmit)="confirm(form)" method="post">
+        <form [formGroup]="confirmForm" (ngSubmit)="confirm()" novalidate>
           <ion-list lines="full" class="ion-no-margin ion-no-padding">
             <ion-item>
               <ion-label position="floating">Phone number
                 <ion-text color="danger">*</ion-text>
               </ion-label>
-              <ion-input required ngModel [(ngModel)]="username" type="phone" name="phone"></ion-input>
+              <ion-input type="phone" formControlName="phone"></ion-input>
             </ion-item>
+            <ion-text color="danger" *ngIf="isSubmitted && confirmFormErrorControl.phone.errors?.required">
+              <sub>Phone is required</sub>
+            </ion-text>
             <ion-item>
               <ion-label position="floating">Code
                 <ion-text color="danger">*</ion-text>
               </ion-label>
-              <ion-input required ngModel type="number" name="code"></ion-input>
+              <ion-input type="number" formControlName="code"></ion-input>
             </ion-item>
           </ion-list>
           <div class="ion-padding">
