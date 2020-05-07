@@ -1,18 +1,17 @@
 <ion-header>
-<!--    <ion-toolbar>-->
+    <!--    <ion-toolbar>-->
 
-<!--        <ion-title *ngIf="user">-->
-<!--            <ion-avatar>-->
-<!--                <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">-->
-<!--            </ion-avatar>-->
-<!--        </ion-title>-->
-        <!--    <ion-buttons slot="end">-->
-        <!--      <ion-button (click)="login()">Login</ion-button>-->
-        <!--      <ion-button (click)="logout()">Logout</ion-button>-->
-        <!--    </ion-buttons>-->
-<!--        <amplify-authenticator framework="ionic"></amplify-authenticator>-->
+    <!--        <ion-title *ngIf="user">-->
+    <!--            <ion-avatar>-->
+    <!--                <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">-->
+    <!--            </ion-avatar>-->
+    <!--        </ion-title>-->
+    <!--    <ion-buttons slot="end">-->
+    <!--      <ion-button (click)="login()">Login</ion-button>-->
+    <!--      <ion-button (click)="logout()">Logout</ion-button>-->
+    <!--    </ion-buttons>-->
 
-<!--    </ion-toolbar>-->
+    <!--    </ion-toolbar>-->
     <ion-toolbar>
         <ion-buttons slot="end">
             <ion-button *ngIf="user" [routerLink]="['/auth']">
@@ -20,40 +19,43 @@
             </ion-button>
             <ion-button *ngIf="user" (click)="this.signOut();">Sign Out
             </ion-button>
-<!--            <ion-list class="theme-list" lines="full">-->
-<!--                <ion-item>-->
-<!--                    <ion-icon slot="start" icon="moon" class="component-icon component-icon-dark"></ion-icon>-->
-<!--                    <ion-label>-->
-<!--                        Dark Mode-->
-<!--                    </ion-label>-->
-<!--                    <ion-toggle slot="end" (ionChange)="this.toggleDarkMode()"></ion-toggle>-->
-<!--                </ion-item>-->
-<!--            </ion-list>-->
+            <!--            <ion-list class="theme-list" lines="full">-->
+            <!--                <ion-item>-->
+            <!--                    <ion-icon slot="start" icon="moon" class="component-icon component-icon-dark"></ion-icon>-->
+            <!--                    <ion-label>-->
+            <!--                        Dark Mode-->
+            <!--                    </ion-label>-->
+            <!--                    <ion-toggle slot="end" (ionChange)="this.toggleDarkMode()"></ion-toggle>-->
+            <!--                </ion-item>-->
+            <!--            </ion-list>-->
         </ion-buttons>
-<!--        <ion-buttons slot="primary">-->
-<!--            <ion-button color="secondary">-->
-<!--                <ion-icon slot="icon-only" ios="ellipsis-horizontal" md="ellipsis-vertical"></ion-icon>-->
-<!--            </ion-button>-->
-<!--        </ion-buttons>-->
-        <ion-title>ToDo Together!</ion-title>
+        <!--        <ion-buttons slot="primary">-->
+        <!--            <ion-button color="secondary">-->
+        <!--                <ion-icon slot="icon-only" ios="ellipsis-horizontal" md="ellipsis-vertical"></ion-icon>-->
+        <!--            </ion-button>-->
+        <!--        </ion-buttons>-->
+        <ion-title>ToDo</ion-title>
     </ion-toolbar>
 </ion-header>
 <ion-content>
     <div *ngIf="itemList">
-        <ion-card *ngFor="let item of itemList.items; index as i">
-            <ion-item>
-                <ion-label class="hover card-title" (click)="modify(item, i)">{{item.title}}</ion-label>
-                <ion-button fill="outline" slot="end" (click)="delete(i)">
-                    <ion-icon name="trash" size="small"></ion-icon>
-                </ion-button>
-                <ion-button fill="outline" slot="end" (click)="complete(i)">
-                    <ion-icon name="checkmark-circle" size="small"
-                              [ngClass]="{'complete': item.status=='complete'}"></ion-icon>
-                </ion-button>
-            </ion-item>
-            <ion-card-content class="hover card-title" (click)="modify(item, i)">
-                {{item.description}}
-            </ion-card-content>
+        <ion-card *ngFor="let item of itemList.items; index as i" [ngClass]="{'done': item.status=='complete'}">
+                <ion-item>
+                    <ion-icon name="checkmark-circle-outline" slot="start"
+                              [ngClass]="{'complete': item.status=='complete'}"
+                              (click)="toggleComplete(i)">
+                    </ion-icon>
+                    <ion-label class="hover card-title"
+                               (click)="modify(item, i)">{{item.title}}</ion-label>
+                    <ion-button fill="clear" slot="end" (click)="delete(i)">
+                        <ion-icon name="trash"></ion-icon>
+                    </ion-button>
+                </ion-item>
+                <ion-card-content *ngIf="item.description"
+                                  (click)="modify(item, i)"
+                                  class="hover card-title">
+                    {{item.description}}
+                </ion-card-content>
         </ion-card>
     </div>
     <!-- Skeleton screen -->

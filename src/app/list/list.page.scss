@@ -4,6 +4,22 @@
 .complete {
   color: green;
 }
-.card-title {
-  margin: 12px 0 0 12px !important;
+//.card-title {
+//  margin: 12px 0 0 12px !important;
+//}
+//.done {
+//  background-color: #000; // black
+//}
+
+
+ion-card.done {
+  --background: var(--ion-color-light);
+  text-decoration: line-through;
+  --ion-text-color: var(--ion-color-medium);
+}
+
+ion-card.done ion-item {
+  --background: var(--ion-color-light);
+  text-decoration: line-through;
+  --ion-text-color: var(--ion-color-medium);
 }

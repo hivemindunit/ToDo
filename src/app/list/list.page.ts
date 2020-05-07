@@ -89,7 +89,9 @@ export class ListPage implements OnInit, AfterContentInit {
                     // ...and add a new item if modal passes back newItem
                     const newItem = new Todo({
                         title: result.data.newItem.title,
-                        description: result.data.newItem.description,
+                        ...(typeof result.data.newItem.description === 'string' && {
+                            description: result.data.newItem.description
+                        }),
                         status: result.data.newItem.status
                     });
                     result.data.itemList.items.push(newItem);
@@ -123,12 +125,18 @@ export class ListPage implements OnInit, AfterContentInit {
         await DataStore.delete(res);
     }
 
-    async complete(i) {
+    async toggleComplete(i) {
         const item = this.itemList.items[i];
+        let targetState: string;
+        if (item.status === 'new') {
+            targetState = 'complete';
+        } else {
+            targetState = 'new';
+        }
         DataStore.query(Todo, item.id).then(original => {
             DataStore.save(
                 Todo.copyOf(original, updated => {
-                    updated.status = 'complete';
+                    updated.status = targetState;
                 })
             );
             this.loadData();
