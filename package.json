@@ -1,8 +1,8 @@
 {
-    "name": "todo-together",
+    "name": "todo",
     "version": "0.0.1",
-    "author": "Ionic Framework",
-    "homepage": "https://ionicframework.com/",
+    "author": "Alexander Tsimbalistov",
+    "homepage": "",
     "scripts": {
         "ng": "ng",
         "start": "ng serve",
