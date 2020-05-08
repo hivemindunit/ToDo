@@ -1,6 +1,10 @@
 <ion-header>
     <ion-toolbar>
-        <ion-title>Edit Item</ion-title>
+<!--        <ion-title>Edit Item</ion-title>-->
+        <ion-buttons slot="end">
+            <ion-button (click)="save()" color="primary">Save</ion-button>
+            <ion-button (click)="cancel()">Cancel</ion-button>
+        </ion-buttons>
     </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -22,8 +26,6 @@
         </ion-list>
     </form>
 </ion-content>
-<ion-footer>
-    <ion-button (click)="save()" color="primary">Save</ion-button>
-    <ion-button (click)="cancel()" color="warning">Cancel</ion-button>
-</ion-footer>
+<!--<ion-footer>-->
+<!--</ion-footer>-->
 
