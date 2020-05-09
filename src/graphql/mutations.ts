@@ -12,6 +12,12 @@ export const createTodo = /* GraphQL */ `
       title
       description
       status
+      createdAt
+      doneAt
+      archivedAt
+      _version
+      _deleted
+      _lastChangedAt
       owner
     }
   }
@@ -26,6 +32,12 @@ export const updateTodo = /* GraphQL */ `
       title
       description
       status
+      createdAt
+      doneAt
+      archivedAt
+      _version
+      _deleted
+      _lastChangedAt
       owner
     }
   }
@@ -40,6 +52,12 @@ export const deleteTodo = /* GraphQL */ `
       title
       description
       status
+      createdAt
+      doneAt
+      archivedAt
+      _version
+      _deleted
+      _lastChangedAt
       owner
     }
   }

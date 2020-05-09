@@ -3,6 +3,7 @@ import {LoadingController, ModalController} from '@ionic/angular';
 import { ToDoItem, ToDoList } from '../../classes/item.class';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Auth} from 'aws-amplify';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-item',
@@ -11,6 +12,7 @@ import {Auth} from 'aws-amplify';
 })
 export class ItemPage implements OnInit {
   itemForm: FormGroup;
+  momentjs: any = moment;
   isSubmitted = false;
   itemList: ToDoList;
   editItem: ToDoItem;

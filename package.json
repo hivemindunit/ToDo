@@ -30,6 +30,7 @@
         "aws-amplify": "^3.0.10",
         "aws-amplify-angular": "^5.0.10",
         "core-js": "^2.5.4",
+        "moment": "^2.25.3",
         "rxjs": "~6.5.1",
         "tslib": "^1.9.0",
         "zone.js": "~0.9.1"

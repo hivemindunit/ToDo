@@ -26,6 +26,12 @@
         </ion-list>
     </form>
 </ion-content>
-<!--<ion-footer>-->
-<!--</ion-footer>-->
+<ion-footer>
+    <ion-toolbar>
+        <ion-title color="medium" class="timestamp">Created {{momentjs(item.createdAt).fromNow()}}</ion-title>
+    </ion-toolbar>
+<!--    <ion-text color="medium">-->
+<!--        <p>Created {{momentjs(item.createdAt).fromNow()}}</p>-->
+<!--    </ion-text>-->
+</ion-footer>
 

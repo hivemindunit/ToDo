@@ -13,20 +13,20 @@
 </ion-header>
 <ion-content>
     <div *ngIf="itemList">
-        <ion-card *ngFor="let item of itemList.items; index as i" [ngClass]="{'done': item.status=='complete'}">
+        <ion-card *ngFor="let item of activeItems(); index as i" [ngClass]="{'done': item.status==='complete'}">
             <ion-item>
                 <ion-icon name="checkmark-circle-outline" slot="start"
                           [ngClass]="{'complete': item.status=='complete'}"
-                          (click)="toggleComplete(i)">
+                          (click)="toggleComplete(item.id)">
                 </ion-icon>
                 <ion-label class="hover card-title"
-                           (click)="modify(item, i)">{{item.title}}</ion-label>
-                <ion-button fill="clear" slot="end" (click)="delete(i)">
+                           (click)="modify(item)">{{item.title}}</ion-label>
+                <ion-button fill="clear" slot="end" (click)="delete(item.id)">
                     <ion-icon name="trash"></ion-icon>
                 </ion-button>
             </ion-item>
             <ion-card-content *ngIf="item.description"
-                              (click)="modify(item, i)"
+                              (click)="modify(item)"
                               class="hover card-title">
                 {{item.description}}
             </ion-card-content>

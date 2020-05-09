@@ -15,11 +15,15 @@ export class ToDoItem {
     title: string;
     description: string;
     status: any;
+    createdAt: string;
+    doneAt: string;
+    archivedAt: string;
 
     constructor(params) {
         this.id = uuid();
         this.title = params.title;
         this.description = params.description;
         this.status = 'new';
+        this.createdAt = Date.now().toString();
     }
 }

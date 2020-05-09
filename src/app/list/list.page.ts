@@ -43,6 +43,14 @@ export class ListPage implements OnInit, AfterContentInit {
             });
     }
 
+    activeItems() {
+        return this.itemList.items.filter(item => item.status !== 'archived');
+    }
+
+    archivedItems() {
+        return this.itemList.items.filter(item => item.status === 'archived');
+    }
+
     ngAfterContentInit() {
         this.events.publish('data:AuthState', this.authState);
     }
@@ -68,7 +76,7 @@ export class ListPage implements OnInit, AfterContentInit {
         };
     }
 
-    async modify(item, i) {
+    async modify(item) {
         const props = {
             itemList: this.itemList,
             /*
@@ -84,7 +92,7 @@ export class ListPage implements OnInit, AfterContentInit {
             componentProps: props
         });
         this.modal.onDidDismiss().then((result) => {
-            if (result !== null) {
+            if (typeof result.data !== 'undefined') {
                 if (result.data.newItem) {
                     // ...and add a new item if modal passes back newItem
                     const newItem = new Todo({
@@ -98,14 +106,14 @@ export class ListPage implements OnInit, AfterContentInit {
                     DataStore.save(newItem);
                 } else if (result.data.editItem) {
                     // ...or splice the items array if the modal passes back editItem
-                    result.data.itemList.items[i] = result.data.editItem;
-                    // tslint:disable-next-line:no-shadowed-variable
-                    const item = result.data.editItem;
-                    DataStore.query(Todo, item.id).then(original => {
+                    const editItem = result.data.editItem;
+                    const i = this.itemList.items.findIndex(element => element.id === editItem.id);
+                    result.data.itemList.items[i] = editItem;
+                    DataStore.query(Todo, editItem.id).then(original => {
                         DataStore.save(
                             Todo.copyOf(original, updated => {
-                                updated.title = item.title;
-                                updated.description = item.description;
+                                updated.title = editItem.title;
+                                updated.description = editItem.description;
                             })
                         );
                     });
@@ -118,18 +126,32 @@ export class ListPage implements OnInit, AfterContentInit {
         return this.modal.present();
     }
 
-    async delete(i) {
-        const item = this.itemList.items[i];
+    async delete(id) {
+        // const item = this.itemList.items[i];
+        const i = this.itemList.items.findIndex(element => element.id === id);
+        // const item = this.itemList.items[i];
         this.itemList.items.splice(i, 1);
-        const res = await DataStore.query(Todo, item.id);
-        await DataStore.delete(res);
+        // const res = await DataStore.query(Todo, item.id);
+        // await DataStore.delete(res);
+        DataStore.query(Todo, id).then(original => {
+            DataStore.save(
+                Todo.copyOf(original, updated => {
+                    updated.status = 'archived';
+                    updated.archivedAt = Date.now().toString();
+                })
+            );
+            // this.loadData();
+        });
     }
 
-    async toggleComplete(i) {
+    async toggleComplete(id) {
+        const i = this.itemList.items.findIndex(element => element.id === id);
         const item = this.itemList.items[i];
         let targetState: string;
+        let doneAt: string = item.doneAt;
         if (item.status === 'new') {
             targetState = 'complete';
+            doneAt = Date.now().toString();
         } else {
             targetState = 'new';
         }
@@ -137,6 +159,7 @@ export class ListPage implements OnInit, AfterContentInit {
             DataStore.save(
                 Todo.copyOf(original, updated => {
                     updated.status = targetState;
+                    updated.doneAt = doneAt;
                 })
             );
             this.loadData();
@@ -147,9 +170,4 @@ export class ListPage implements OnInit, AfterContentInit {
         this.amplifyService.auth().signOut();
         this.router.navigate(['/auth']);
     }
-
-    // toggleDarkMode() {
-    //     console.log('dark!');
-    //     document.body.classList.toggle('dark');
-    // }
 }

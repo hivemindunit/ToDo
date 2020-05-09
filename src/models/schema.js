@@ -30,6 +30,27 @@ export const schema = {
                     "type": "String",
                     "isRequired": true,
                     "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "doneAt": {
+                    "name": "doneAt",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "archivedAt": {
+                    "name": "archivedAt",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
                 }
             },
             "syncable": true,
@@ -62,5 +83,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "9b9712077c4c67f3a89cfa5e217f0034"
+    "version": "b935d22fa1846181bfec7fd19e9317f6"
 };

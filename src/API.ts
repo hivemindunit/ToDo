@@ -7,12 +7,19 @@ export type CreateTodoInput = {
   title: string,
   description?: string | null,
   status: string,
+  createdAt?: string | null,
+  doneAt?: string | null,
+  archivedAt?: string | null,
+  _version?: number | null,
 };
 
 export type ModelTodoConditionInput = {
   title?: ModelStringInput | null,
   description?: ModelStringInput | null,
   status?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  doneAt?: ModelStringInput | null,
+  archivedAt?: ModelStringInput | null,
   and?: Array< ModelTodoConditionInput | null > | null,
   or?: Array< ModelTodoConditionInput | null > | null,
   not?: ModelTodoConditionInput | null,
@@ -63,10 +70,15 @@ export type UpdateTodoInput = {
   title?: string | null,
   description?: string | null,
   status?: string | null,
+  createdAt?: string | null,
+  doneAt?: string | null,
+  archivedAt?: string | null,
+  _version?: number | null,
 };
 
 export type DeleteTodoInput = {
   id?: string | null,
+  _version?: number | null,
 };
 
 export type ModelTodoFilterInput = {
@@ -74,6 +86,9 @@ export type ModelTodoFilterInput = {
   title?: ModelStringInput | null,
   description?: ModelStringInput | null,
   status?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  doneAt?: ModelStringInput | null,
+  archivedAt?: ModelStringInput | null,
   and?: Array< ModelTodoFilterInput | null > | null,
   or?: Array< ModelTodoFilterInput | null > | null,
   not?: ModelTodoFilterInput | null,
@@ -107,6 +122,12 @@ export type CreateTodoMutation = {
     title: string,
     description: string | null,
     status: string,
+    createdAt: string | null,
+    doneAt: string | null,
+    archivedAt: string | null,
+    _version: number,
+    _deleted: boolean | null,
+    _lastChangedAt: number,
     owner: string | null,
   } | null,
 };
@@ -123,6 +144,12 @@ export type UpdateTodoMutation = {
     title: string,
     description: string | null,
     status: string,
+    createdAt: string | null,
+    doneAt: string | null,
+    archivedAt: string | null,
+    _version: number,
+    _deleted: boolean | null,
+    _lastChangedAt: number,
     owner: string | null,
   } | null,
 };
@@ -139,7 +166,42 @@ export type DeleteTodoMutation = {
     title: string,
     description: string | null,
     status: string,
+    createdAt: string | null,
+    doneAt: string | null,
+    archivedAt: string | null,
+    _version: number,
+    _deleted: boolean | null,
+    _lastChangedAt: number,
     owner: string | null,
+  } | null,
+};
+
+export type SyncTodosQueryVariables = {
+  filter?: ModelTodoFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncTodosQuery = {
+  syncTodos:  {
+    __typename: "ModelTodoConnection",
+    items:  Array< {
+      __typename: "Todo",
+      id: string,
+      title: string,
+      description: string | null,
+      status: string,
+      createdAt: string | null,
+      doneAt: string | null,
+      archivedAt: string | null,
+      _version: number,
+      _deleted: boolean | null,
+      _lastChangedAt: number,
+      owner: string | null,
+    } | null > | null,
+    nextToken: string | null,
+    startedAt: number | null,
   } | null,
 };
 
@@ -154,6 +216,12 @@ export type GetTodoQuery = {
     title: string,
     description: string | null,
     status: string,
+    createdAt: string | null,
+    doneAt: string | null,
+    archivedAt: string | null,
+    _version: number,
+    _deleted: boolean | null,
+    _lastChangedAt: number,
     owner: string | null,
   } | null,
 };
@@ -173,9 +241,16 @@ export type ListTodosQuery = {
       title: string,
       description: string | null,
       status: string,
+      createdAt: string | null,
+      doneAt: string | null,
+      archivedAt: string | null,
+      _version: number,
+      _deleted: boolean | null,
+      _lastChangedAt: number,
       owner: string | null,
     } | null > | null,
     nextToken: string | null,
+    startedAt: number | null,
   } | null,
 };
 
@@ -190,6 +265,12 @@ export type OnCreateTodoSubscription = {
     title: string,
     description: string | null,
     status: string,
+    createdAt: string | null,
+    doneAt: string | null,
+    archivedAt: string | null,
+    _version: number,
+    _deleted: boolean | null,
+    _lastChangedAt: number,
     owner: string | null,
   } | null,
 };
@@ -205,6 +286,12 @@ export type OnUpdateTodoSubscription = {
     title: string,
     description: string | null,
     status: string,
+    createdAt: string | null,
+    doneAt: string | null,
+    archivedAt: string | null,
+    _version: number,
+    _deleted: boolean | null,
+    _lastChangedAt: number,
     owner: string | null,
   } | null,
 };
@@ -220,6 +307,12 @@ export type OnDeleteTodoSubscription = {
     title: string,
     description: string | null,
     status: string,
+    createdAt: string | null,
+    doneAt: string | null,
+    archivedAt: string | null,
+    _version: number,
+    _deleted: boolean | null,
+    _lastChangedAt: number,
     owner: string | null,
   } | null,
 };
