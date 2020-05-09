@@ -8,7 +8,6 @@ import {AmplifyService} from 'aws-amplify-angular';
 import {Router} from '@angular/router';
 import {DataStore} from '@aws-amplify/datastore';
 import {Todo} from '../../models';
-// import * as moment from 'moment';
 
 @Component({
     selector: 'app-list-page',
@@ -17,7 +16,6 @@ import {Todo} from '../../models';
 })
 
 export class ListPage implements OnInit, AfterContentInit {
-    // momentjs: any = moment;
     modal: any;
     data: any;
     user: any;
@@ -72,7 +70,6 @@ export class ListPage implements OnInit, AfterContentInit {
     }
 
     async ngOnInit() {
-        // this.getItems();
         // Use AWS Amplify to get user data when creating items
         this.user = await this.amplifyService.auth().currentUserInfo();
         if (this.user == null) {
@@ -143,12 +140,8 @@ export class ListPage implements OnInit, AfterContentInit {
     }
 
     async delete(id) {
-        // const item = this.itemList.items[i];
         const i = this.itemList.items.findIndex(element => element.id === id);
-        // const item = this.itemList.items[i];
         this.itemList.items.splice(i, 1);
-        // const res = await DataStore.query(Todo, item.id);
-        // await DataStore.delete(res);
         DataStore.query(Todo, id).then(original => {
             DataStore.save(
                 Todo.copyOf(original, updated => {
@@ -156,7 +149,6 @@ export class ListPage implements OnInit, AfterContentInit {
                     updated.archivedAt = Date.now().toString();
                 })
             );
-            // this.loadData();
         });
     }
 
