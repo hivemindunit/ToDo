@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {LoadingController, ModalController} from '@ionic/angular';
+import {ModalController} from '@ionic/angular';
 import { ToDoItem, ToDoList } from '../../classes/item.class';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Auth} from 'aws-amplify';
 import * as moment from 'moment';
 
 @Component({
