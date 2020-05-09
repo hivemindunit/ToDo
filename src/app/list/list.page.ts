@@ -8,6 +8,7 @@ import {AmplifyService} from 'aws-amplify-angular';
 import {Router} from '@angular/router';
 import {DataStore} from '@aws-amplify/datastore';
 import {Todo} from '../../models';
+// import * as moment from 'moment';
 
 @Component({
     selector: 'app-list-page',
@@ -16,6 +17,7 @@ import {Todo} from '../../models';
 })
 
 export class ListPage implements OnInit, AfterContentInit {
+    // momentjs: any = moment;
     modal: any;
     data: any;
     user: any;
@@ -43,8 +45,22 @@ export class ListPage implements OnInit, AfterContentInit {
             });
     }
 
+    compareItem(a, b) {
+        const itemA = Date.parse(a.createdAt);
+        const itemB = Date.parse(b.createdAt);
+
+        let comparison = 0;
+        if (itemA > itemB) {
+            comparison = 1;
+        } else if (itemA < itemB) {
+            comparison = -1;
+        }
+        return comparison;
+    }
+
     activeItems() {
-        return this.itemList.items.filter(item => item.status !== 'archived');
+        const items = this.itemList.items.filter(item => item.status !== 'archived');
+        return items.sort(this.compareItem);
     }
 
     archivedItems() {
