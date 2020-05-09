@@ -8,61 +8,69 @@
 </ion-header>
 <ion-content>
     <ion-grid>
-        <ion-row class="ion-justify-content-center">
+        <ion-row *ngIf="statusDefined && userName" class="ion-justify-content-center">
             <ion-col size-md="4">
-                <form [formGroup]="loginForm" (ngSubmit)="login()" novalidate>
-                    <ion-list lines="full" class="ion-no-margin ion-no-padding">
-                        <ion-item>
-                            <ion-label position="floating">Phone
-                                <ion-text color="danger">*</ion-text>
-                            </ion-label>
-                            <ion-input type="text" formControlName="phone"></ion-input>
-                        </ion-item>
-                        <ion-text color="danger" *ngIf="isSubmitted && errorControl.phone.errors?.required">
-                            <sub>Phone is required</sub>
-                        </ion-text>
-                        <ion-item>
-                            <ion-label position="floating">Password
-                                <ion-text color="danger">*</ion-text>
-                            </ion-label>
-                            <ion-input type="password" formControlName="password"></ion-input>
-                        </ion-item>
-                        <ion-text color="danger" *ngIf="isSubmitted && errorControl.password.errors?.required">
-                            <sub>Password is required</sub>
-                        </ion-text>
-                    </ion-list>
+                <p>Logged in as {{userName}}</p>
+                <ion-button (click)="signOut()">Sign out</ion-button>
+            </ion-col>
+        </ion-row>
+        <div *ngIf="statusDefined && !userName">
+            <ion-row class="ion-justify-content-center">
+                <ion-col size-md="4">
+                    <form [formGroup]="loginForm" (ngSubmit)="login()" novalidate>
+                        <ion-list lines="full" class="ion-no-margin ion-no-padding">
+                            <ion-item>
+                                <ion-label position="floating">Phone
+                                    <ion-text color="danger">*</ion-text>
+                                </ion-label>
+                                <ion-input type="text" formControlName="phone"></ion-input>
+                            </ion-item>
+                            <ion-text color="danger" *ngIf="isSubmitted && errorControl.phone.errors?.required">
+                                <sub>Phone is required</sub>
+                            </ion-text>
+                            <ion-item>
+                                <ion-label position="floating">Password
+                                    <ion-text color="danger">*</ion-text>
+                                </ion-label>
+                                <ion-input type="password" formControlName="password"></ion-input>
+                            </ion-item>
+                            <ion-text color="danger" *ngIf="isSubmitted && errorControl.password.errors?.required">
+                                <sub>Password is required</sub>
+                            </ion-text>
+                        </ion-list>
 
-                    <div class="ion-padding">
-                        <ion-button expand="block" type="submit" class="ion-no-margin">Login</ion-button>
+                        <div class="ion-padding">
+                            <ion-button expand="block" type="submit" class="ion-no-margin">Login</ion-button>
+                        </div>
+                    </form>
+                </ion-col>
+            </ion-row>
+            <ion-row class="ion-justify-content-center" *ngIf="this.validationError">
+                <ion-col size-md="4">
+                    <div class="ion-text-center">
+                        <ion-chip>
+                            <ion-label color="danger">{{validationError}}</ion-label>
+                        </ion-chip>
                     </div>
-                </form>
-            </ion-col>
-        </ion-row>
-        <ion-row class="ion-justify-content-center" *ngIf="this.validationError">
-            <ion-col size-md="4">
-                <div class="ion-text-center">
-                    <ion-chip>
-                        <ion-label color="danger">{{validationError}}</ion-label>
-                    </ion-chip>
-                </div>
-            </ion-col>
-        </ion-row>
-        <ion-row class="ion-justify-content-center">
-            <ion-col size-md="4">
-                <div class="ion-text-center">
-                    <ion-button size="small" fill="outline" [routerLink]="['/restore-access']">Forgot password?
-                    </ion-button>
-                </div>
-            </ion-col>
-        </ion-row>
-        <ion-row class="ion-justify-content-center">
-            <ion-col size-md="4">
-                <div class="ion-text-center">
-                    <p>New user?</p>
-                    <ion-button expand="block" color="success" [routerLink]="['/register']">Register</ion-button>
-                </div>
-            </ion-col>
-        </ion-row>
+                </ion-col>
+            </ion-row>
+            <ion-row class="ion-justify-content-center">
+                <ion-col size-md="4">
+                    <div class="ion-text-center">
+                        <ion-button size="small" fill="outline" [routerLink]="['/restore-access']">Forgot password?
+                        </ion-button>
+                    </div>
+                </ion-col>
+            </ion-row>
+            <ion-row class="ion-justify-content-center">
+                <ion-col size-md="4">
+                    <div class="ion-text-center">
+                        <p>New user?</p>
+                        <ion-button expand="block" color="success" [routerLink]="['/register']">Register</ion-button>
+                    </div>
+                </ion-col>
+            </ion-row>
+        </div>
     </ion-grid>
     <!--    <amplify-authenticator framework="ionic"></amplify-authenticator>-->
 </ion-content>

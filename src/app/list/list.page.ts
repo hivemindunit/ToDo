@@ -174,8 +174,8 @@ export class ListPage implements OnInit, AfterContentInit {
         });
     }
 
-    signOut() {
-        this.amplifyService.auth().signOut();
-        this.router.navigate(['/auth']);
-    }
+    // signOut() {
+    //     this.amplifyService.auth().signOut();
+    //     this.router.navigate(['/auth']);
+    // }
 }
