@@ -47,7 +47,9 @@ export class AuthPage implements OnInit {
         Auth.currentUserInfo()
             .then(info => {
                 this.statusDefined = true;
-                this.userName = info.attributes.phone_number;
+                if (info !== null) {
+                    this.userName = info.attributes.phone_number;
+                }
                 loading.dismiss();
             });
     }
