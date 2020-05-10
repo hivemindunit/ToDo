@@ -8,6 +8,7 @@ import {AmplifyService} from 'aws-amplify-angular';
 import {Router} from '@angular/router';
 import {DataStore} from '@aws-amplify/datastore';
 import {Todo} from '../../models';
+import { Auth } from 'aws-amplify';
 
 @Component({
     selector: 'app-list-page',
@@ -36,11 +37,11 @@ export class ListPage implements OnInit, AfterContentInit {
         this.authService = guard;
         this.amplifyService = amplify;
         // Listen for changes to the AuthState in order to change item list appropriately
-        this.amplifyService.authStateChange$
-            .subscribe(authState => {
-                this.authState.loggedIn = authState.state === 'signedIn';
-                this.events.publish('data:AuthState', this.authState);
-            });
+        // this.amplifyService.authStateChange$
+        //     .subscribe(authState => {
+        //         this.authState.loggedIn = authState.state === 'signedIn';
+        //         this.events.publish('data:AuthState', this.authState);
+        //     });
     }
 
     compareItem(a, b) {
@@ -61,19 +62,27 @@ export class ListPage implements OnInit, AfterContentInit {
         return items.sort(this.compareItem);
     }
 
-    async ionViewWillEnter() {
-        if (this.user != null) {
-            await this.loadData();
-        }
+    async ngOnInit() {
     }
 
     ngAfterContentInit() {
-        this.events.publish('data:AuthState', this.authState);
+        // this.events.publish('data:AuthState', this.authState);
     }
 
-    async ngOnInit() {
+    async ionViewWillEnter() {
         // Use AWS Amplify to get user data when creating items
-        this.user = await this.amplifyService.auth().currentUserInfo();
+        try {
+            this.user = await Auth.currentAuthenticatedUser();
+        } catch (err) {
+            console.log(err);
+            if (err === 'not authenticated') {
+                await this.router.navigate(['/auth']);
+            } else {
+                console.log(err);
+            }
+        }
+        console.log(this.user);
+        // this.user = await this.amplifyService.auth().currentUserInfo();
         if (this.user == null) {
             await this.router.navigate(['/auth']);
         } else {
