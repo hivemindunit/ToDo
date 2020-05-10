@@ -21,6 +21,10 @@ const routes: Routes = [
   {
     path: 'restore-access',
     loadChildren: () => import('./restore-access/restore-access.module').then( m => m.RestoreAccessPageModule)
+  },
+  {
+    path: 'archive',
+    loadChildren: () => import('./archive/archive.module').then( m => m.ArchivePageModule)
   }
 ];
 @NgModule({

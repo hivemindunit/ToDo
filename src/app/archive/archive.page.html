@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+      <ion-button [routerLink]="['/']">
+        <ion-icon name="list-circle-outline" slot="start"></ion-icon>
+        Current tasks
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div *ngIf="itemList">
+    <ion-card *ngFor="let item of archivedItems(); index as i" [ngClass]="{'done': item.status==='complete'}">
+      <ion-item>
+        <ion-icon *ngIf="item.status==='new'" name="checkmark-circle-outline" slot="start">
+        </ion-icon>
+        <ion-icon *ngIf="item.status==='complete'" name="checkmark-circle" slot="start" class="complete">
+        </ion-icon>
+        <ion-label class="hover card-title">{{item.title}}</ion-label>
+        <ion-button fill="clear" slot="end" (click)="revert(item.id)">
+          <ion-icon name="arrow-undo-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
+      <ion-card-content *ngIf="item.description"
+                        class="hover card-title">
+        {{item.description}}
+      </ion-card-content>
+    </ion-card>
+  </div>
+  <!-- Skeleton screen -->
+  <div *ngIf="!itemList">
+    <ion-card>
+      <ion-item>
+        <ion-label class="hover card-title">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-label>
+      </ion-item>
+      <ion-card-content class="hover card-title">
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-card-content>
+    </ion-card>
+    <ion-card>
+      <ion-item>
+        <ion-label class="hover card-title">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-label>
+      </ion-item>
+      <ion-card-content class="hover card-title">
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-card-content>
+    </ion-card>
+    <ion-card>
+      <ion-item>
+        <ion-label class="hover card-title">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-label>
+      </ion-item>
+      <ion-card-content class="hover card-title">
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

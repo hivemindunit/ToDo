@@ -61,8 +61,10 @@ export class ListPage implements OnInit, AfterContentInit {
         return items.sort(this.compareItem);
     }
 
-    archivedItems() {
-        return this.itemList.items.filter(item => item.status === 'archived');
+    async ionViewWillEnter() {
+        if (this.user != null) {
+            await this.loadData();
+        }
     }
 
     ngAfterContentInit() {
@@ -73,7 +75,7 @@ export class ListPage implements OnInit, AfterContentInit {
         // Use AWS Amplify to get user data when creating items
         this.user = await this.amplifyService.auth().currentUserInfo();
         if (this.user == null) {
-            this.router.navigate(['/auth']);
+            await this.router.navigate(['/auth']);
         } else {
             await this.loadData();
         }
@@ -173,9 +175,4 @@ export class ListPage implements OnInit, AfterContentInit {
             this.loadData();
         });
     }
-
-    // signOut() {
-    //     this.amplifyService.auth().signOut();
-    //     this.router.navigate(['/auth']);
-    // }
 }

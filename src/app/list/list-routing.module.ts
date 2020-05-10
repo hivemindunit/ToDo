@@ -10,6 +10,10 @@ const routes: Routes = [
   {
     path: 'item',
     loadChildren: () => import('./item/item.module').then( m => m.ItemPageModule)
+  },
+  {
+    path: 'archive',
+    loadChildren: () => import('../archive/archive.module').then( m => m.ArchivePageModule)
   }
 ];
 

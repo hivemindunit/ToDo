@@ -2,6 +2,10 @@
     <ion-toolbar>
         <ion-buttons slot="start">
             <ion-menu-button autoHide="false"></ion-menu-button>
+            <ion-button [routerLink]="['/archive']">
+                <ion-icon name="file-tray-full-outline" slot="start"></ion-icon>
+                Archive
+            </ion-button>
         </ion-buttons>
         <ion-buttons slot="end">
                 <ion-button fill="solid" (click)="modify(null)">
