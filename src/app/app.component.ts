@@ -15,6 +15,11 @@ export class AppComponent {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar
   ) {
+    document.addEventListener('ionBackButton', (ev) => {
+      ev.detail.register(10, () => {
+        console.log('Handler was called!');
+      });
+    });
     this.initializeApp();
   }
 
