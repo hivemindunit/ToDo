@@ -15,8 +15,10 @@
     <div *ngIf="itemList">
         <ion-card *ngFor="let item of activeItems(); index as i" [ngClass]="{'done': item.status==='complete'}">
             <ion-item>
-                <ion-icon name="checkmark-circle-outline" slot="start"
-                          [ngClass]="{'complete': item.status=='complete'}"
+                <ion-icon *ngIf="item.status==='new'" name="checkmark-circle-outline" slot="start"
+                          (click)="toggleComplete(item.id)">
+                </ion-icon>
+                <ion-icon *ngIf="item.status==='complete'" name="checkmark-circle" slot="start" class="complete"
                           (click)="toggleComplete(item.id)">
                 </ion-icon>
                 <ion-label class="hover card-title"
