@@ -81,7 +81,6 @@ export class ListPage implements OnInit, AfterContentInit {
                 console.log(err);
             }
         }
-        console.log(this.user);
         // this.user = await this.amplifyService.auth().currentUserInfo();
         if (this.user == null) {
             await this.router.navigate(['/auth']);
@@ -98,7 +97,6 @@ export class ListPage implements OnInit, AfterContentInit {
             // items: res.data.listTodos.items
             items: res
         };
-        console.log(this.itemList.items);
     }
 
     async modify(item) {
