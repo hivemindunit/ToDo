@@ -98,6 +98,7 @@ export class ListPage implements OnInit, AfterContentInit {
             // items: res.data.listTodos.items
             items: res
         };
+        console.log(this.itemList.items);
     }
 
     async modify(item) {
