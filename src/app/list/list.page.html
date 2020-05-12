@@ -16,6 +16,10 @@
     </ion-toolbar>
 </ion-header>
 <ion-content>
+    <!-- Default Refresher -->
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
     <div *ngIf="itemList">
         <ion-card *ngFor="let item of activeItems(); index as i" [ngClass]="{'done': item.status==='complete'}">
             <ion-item>

@@ -8,7 +8,7 @@ import {AmplifyService} from 'aws-amplify-angular';
 import {Router} from '@angular/router';
 import {DataStore} from '@aws-amplify/datastore';
 import {Todo} from '../../models';
-import { Auth } from 'aws-amplify';
+import {Auth} from 'aws-amplify';
 
 @Component({
     selector: 'app-list-page',
@@ -90,13 +90,15 @@ export class ListPage implements OnInit, AfterContentInit {
     }
 
     private async loadData() {
-        const res = await DataStore.query(Todo);
-        this.itemList = {
-            userId: this.user.userId,
-            // @ts-ignore
-            // items: res.data.listTodos.items
-            items: res
-        };
+        DataStore.query(Todo).then(res => {
+                this.itemList = {
+                    userId: this.user.userId,
+                    // @ts-ignore
+                    // items: res.data.listTodos.items
+                    items: res
+                };
+            }
+        );
     }
 
     async modify(item) {
@@ -182,5 +184,9 @@ export class ListPage implements OnInit, AfterContentInit {
             );
             this.loadData();
         });
+    }
+
+    doRefresh(event) {
+        this.loadData().then(event.target.complete());
     }
 }
