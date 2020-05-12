@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import {Component, HostListener} from '@angular/core';
 
-import { Platform } from '@ionic/angular';
+import { Platform, NavController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import {BackButtonService} from './back-button.service';
 
 @Component({
   selector: 'app-root',
@@ -10,10 +11,13 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
   styleUrls: ['app.component.scss']
 })
 export class AppComponent {
+  @HostListener('document:backbutton')
+  backButtonService: BackButtonService;
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
-    private statusBar: StatusBar
+    private statusBar: StatusBar,
+    private navCtrl: NavController
   ) {
     this.platform.backButton.subscribeWithPriority(10, () => {
       console.log('Handler was called!');
@@ -26,5 +30,13 @@ export class AppComponent {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
+  }
+
+  onBackButton() {
+    if (this.backButtonService.quitOnBackButton) {
+      this.backButtonService.closeApp();
+    } else {
+      this.navCtrl.back();
+    }
   }
 }
