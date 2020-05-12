@@ -13,7 +13,7 @@
                 <ion-label position="floating">Title
                     <ion-text color="danger">*</ion-text>
                 </ion-label>
-                <ion-input formControlName="title"></ion-input>
+                <ion-input formControlName="title" #title></ion-input>
             </ion-item>
             <ion-text color="danger" *ngIf="isSubmitted && formErrorControl.title.errors?.required">
                 <sub>Title is required</sub>

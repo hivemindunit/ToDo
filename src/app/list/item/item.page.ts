@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import {ModalController} from '@ionic/angular';
 import { ToDoItem, ToDoList } from '../../classes/item.class';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -9,7 +9,12 @@ import * as moment from 'moment';
   templateUrl: './item.page.html',
   styleUrls: ['./item.page.scss'],
 })
+
+
+
 export class ItemPage implements OnInit {
+  @ViewChild('title', {static: true}) focusedInput: ElementRef;
+
   itemForm: FormGroup;
   momentjs: any = moment;
   isSubmitted = false;
@@ -32,6 +37,11 @@ export class ItemPage implements OnInit {
     this.item = this.editItem ? Object.assign({}, this.editItem) : new ToDoItem({});
     this.itemForm.controls.title.setValue(this.item.title);
     this.itemForm.controls.description.setValue(this.item.description);
+    // focus on the #title element
+    setTimeout(() => {
+      // @ts-ignore
+      this.focusedInput.setFocus();
+    }, 500);
   }
 
   get formErrorControl() {
