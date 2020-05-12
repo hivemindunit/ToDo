@@ -3,14 +3,13 @@ import {ModalController} from '@ionic/angular';
 import { ToDoItem, ToDoList } from '../../classes/item.class';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as moment from 'moment';
+import {BackButtonService} from '../../back-button.service';
 
 @Component({
   selector: 'app-item',
   templateUrl: './item.page.html',
   styleUrls: ['./item.page.scss'],
 })
-
-
 
 export class ItemPage implements OnInit {
   @ViewChild('title', {static: true}) focusedInput: ElementRef;
@@ -22,7 +21,7 @@ export class ItemPage implements OnInit {
   editItem: ToDoItem;
   user: string;
   item: ToDoItem;
-
+  backButtonService: BackButtonService;
   constructor(private modalController: ModalController, public formBuilder: FormBuilder) { }
 
   ngOnInit() {
@@ -72,4 +71,11 @@ export class ItemPage implements OnInit {
   cancel() {
     this.modalController.dismiss({itemList: this.itemList});
   }
+
+  // ionViewWillEnter() {
+  //   this.backButtonService.quitOnBackButton = true;
+  // }
+  // ionViewWillLeave() {
+  //   this.backButtonService.quitOnBackButton = false;
+  // }
 }
