@@ -10,6 +10,7 @@ export type CreateTodoInput = {
   createdAt?: string | null,
   doneAt?: string | null,
   archivedAt?: string | null,
+  order?: number | null,
   _version?: number | null,
 };
 
@@ -20,6 +21,7 @@ export type ModelTodoConditionInput = {
   createdAt?: ModelStringInput | null,
   doneAt?: ModelStringInput | null,
   archivedAt?: ModelStringInput | null,
+  order?: ModelIntInput | null,
   and?: Array< ModelTodoConditionInput | null > | null,
   or?: Array< ModelTodoConditionInput | null > | null,
   not?: ModelTodoConditionInput | null,
@@ -65,6 +67,18 @@ export type ModelSizeInput = {
   between?: Array< number | null > | null,
 };
 
+export type ModelIntInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+};
+
 export type UpdateTodoInput = {
   id: string,
   title?: string | null,
@@ -73,6 +87,7 @@ export type UpdateTodoInput = {
   createdAt?: string | null,
   doneAt?: string | null,
   archivedAt?: string | null,
+  order?: number | null,
   _version?: number | null,
 };
 
@@ -89,6 +104,7 @@ export type ModelTodoFilterInput = {
   createdAt?: ModelStringInput | null,
   doneAt?: ModelStringInput | null,
   archivedAt?: ModelStringInput | null,
+  order?: ModelIntInput | null,
   and?: Array< ModelTodoFilterInput | null > | null,
   or?: Array< ModelTodoFilterInput | null > | null,
   not?: ModelTodoFilterInput | null,
@@ -125,6 +141,7 @@ export type CreateTodoMutation = {
     createdAt: string | null,
     doneAt: string | null,
     archivedAt: string | null,
+    order: number | null,
     _version: number,
     _deleted: boolean | null,
     _lastChangedAt: number,
@@ -147,6 +164,7 @@ export type UpdateTodoMutation = {
     createdAt: string | null,
     doneAt: string | null,
     archivedAt: string | null,
+    order: number | null,
     _version: number,
     _deleted: boolean | null,
     _lastChangedAt: number,
@@ -169,6 +187,7 @@ export type DeleteTodoMutation = {
     createdAt: string | null,
     doneAt: string | null,
     archivedAt: string | null,
+    order: number | null,
     _version: number,
     _deleted: boolean | null,
     _lastChangedAt: number,
@@ -195,6 +214,7 @@ export type SyncTodosQuery = {
       createdAt: string | null,
       doneAt: string | null,
       archivedAt: string | null,
+      order: number | null,
       _version: number,
       _deleted: boolean | null,
       _lastChangedAt: number,
@@ -219,6 +239,7 @@ export type GetTodoQuery = {
     createdAt: string | null,
     doneAt: string | null,
     archivedAt: string | null,
+    order: number | null,
     _version: number,
     _deleted: boolean | null,
     _lastChangedAt: number,
@@ -244,6 +265,7 @@ export type ListTodosQuery = {
       createdAt: string | null,
       doneAt: string | null,
       archivedAt: string | null,
+      order: number | null,
       _version: number,
       _deleted: boolean | null,
       _lastChangedAt: number,
@@ -268,6 +290,7 @@ export type OnCreateTodoSubscription = {
     createdAt: string | null,
     doneAt: string | null,
     archivedAt: string | null,
+    order: number | null,
     _version: number,
     _deleted: boolean | null,
     _lastChangedAt: number,
@@ -289,6 +312,7 @@ export type OnUpdateTodoSubscription = {
     createdAt: string | null,
     doneAt: string | null,
     archivedAt: string | null,
+    order: number | null,
     _version: number,
     _deleted: boolean | null,
     _lastChangedAt: number,
@@ -310,6 +334,7 @@ export type OnDeleteTodoSubscription = {
     createdAt: string | null,
     doneAt: string | null,
     archivedAt: string | null,
+    order: number | null,
     _version: number,
     _deleted: boolean | null,
     _lastChangedAt: number,

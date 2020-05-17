@@ -23,6 +23,7 @@ export const syncTodos = /* GraphQL */ `
         createdAt
         doneAt
         archivedAt
+        order
         _version
         _deleted
         _lastChangedAt
@@ -43,6 +44,7 @@ export const getTodo = /* GraphQL */ `
       createdAt
       doneAt
       archivedAt
+      order
       _version
       _deleted
       _lastChangedAt
@@ -65,6 +67,7 @@ export const listTodos = /* GraphQL */ `
         createdAt
         doneAt
         archivedAt
+        order
         _version
         _deleted
         _lastChangedAt

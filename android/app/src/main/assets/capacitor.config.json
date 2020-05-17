@@ -1,6 +1,6 @@
 {
   "appId": "com.todo.together",
-  "appName": "todo-together",
+  "appName": "get-it-done",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",

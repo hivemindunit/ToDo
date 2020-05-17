@@ -1,5 +1,5 @@
-import {Component, OnInit, AfterContentInit, Input} from '@angular/core';
-import {ModalController} from '@ionic/angular';
+import {Component, OnInit, AfterContentInit, Input, ViewChild} from '@angular/core';
+import {IonReorderGroup, ModalController} from '@ionic/angular';
 import {ToDoList} from '../classes/item.class';
 import {Events} from '../events.service';
 import {ItemPage} from './item/item.page';
@@ -17,6 +17,7 @@ import {Auth} from 'aws-amplify';
 })
 
 export class ListPage implements OnInit, AfterContentInit {
+    @ViewChild(IonReorderGroup, {static: true}) reorderGroup: IonReorderGroup;
     modal: any;
     data: any;
     user: any;
@@ -45,8 +46,8 @@ export class ListPage implements OnInit, AfterContentInit {
     }
 
     compareItem(a, b) {
-        const itemA = Date.parse(a.createdAt);
-        const itemB = Date.parse(b.createdAt);
+        const itemA = a.order; // Date.parse(a.createdAt);
+        const itemB = b.order; // Date.parse(b.createdAt);
 
         let comparison = 0;
         if (itemA > itemB) {
@@ -67,6 +68,10 @@ export class ListPage implements OnInit, AfterContentInit {
 
     ngAfterContentInit() {
         // this.events.publish('data:AuthState', this.authState);
+        // const subscription = DataStore.observe(Todo, item => item.status('notContains', 'archived')).subscribe(msg => {
+        //     // res = res.sort(this.compareItem);
+        //     console.log(msg);
+        // });
     }
 
     async ionViewWillEnter() {
@@ -90,8 +95,9 @@ export class ListPage implements OnInit, AfterContentInit {
     }
 
     private async loadData() {
-        DataStore.query(Todo).then(res => {
-                this.itemList = {
+        DataStore.query(Todo, item => item.status('notContains', 'archived')).then(res => {
+            res = res.sort(this.compareItem);
+            this.itemList = {
                     userId: this.user.userId,
                     // @ts-ignore
                     // items: res.data.listTodos.items
@@ -120,12 +126,22 @@ export class ListPage implements OnInit, AfterContentInit {
             if (typeof result.data !== 'undefined') {
                 if (result.data.newItem) {
                     // ...and add a new item if modal passes back newItem
+                    const items = result.data.itemList.items.filter(item => item.status !== 'archived');
+                    // console.log(items);
+                    let itemOrder;
+                    if (items.length === 0) {
+                        itemOrder = 0;
+                    } else {
+                        itemOrder = items[items.length - 1].order + 1;
+                    }
+                    // console.log(items.length);
                     const newItem = new Todo({
                         title: result.data.newItem.title,
                         ...(typeof result.data.newItem.description === 'string' && {
                             description: result.data.newItem.description
                         }),
-                        status: result.data.newItem.status
+                        status: result.data.newItem.status,
+                        order: itemOrder
                     });
                     result.data.itemList.items.push(newItem);
                     DataStore.save(newItem);
@@ -186,7 +202,44 @@ export class ListPage implements OnInit, AfterContentInit {
         });
     }
 
-    doRefresh(event) {
-        this.loadData().then(event.target.complete());
+    // doRefresh(event) {
+    //     this.loadData().then(event.target.complete());
+    // }
+
+    async doReorder(ev: any) {
+        // The `from` and `to` properties contain the index of the item
+        // when the drag started and ended, respectively
+        // console.log(ev);
+        let fromIndex, toIndex;
+        const items = this.itemList.items;
+        // in some cases detail.from or detail.to exceeds array boundaries. The code below is to correct that
+        if (ev.detail.from > items.length - 1) {
+            fromIndex = items.length - 1;
+        } else {
+            fromIndex = ev.detail.from;
+        }
+        if (ev.detail.to > items.length - 1) {
+            toIndex = items.length - 1;
+        } else {
+            toIndex = ev.detail.to;
+        }
+        // Moving target element to new place
+        const itemMove = items.splice(fromIndex, 1)[0];
+        items.splice(toIndex, 0, itemMove);
+        // Correcting orders according to the new order
+        for (let i = 0; i < items.length; i++) {
+            await DataStore.query(Todo, items[i].id).then(ori => {
+                DataStore.save(
+                    Todo.copyOf(ori, updated => {
+                        updated.order = i;
+                    })
+                );
+            });
+        }
+        this.itemList.items = items;
+        // await this.loadData();
+        // Finish the reorder and position the item in the DOM based on
+        // where the gesture ended.
+        ev.detail.complete();
     }
 }

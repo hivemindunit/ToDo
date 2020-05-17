@@ -17,11 +17,12 @@
 </ion-header>
 <ion-content>
     <!-- Default Refresher -->
-    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-        <ion-refresher-content></ion-refresher-content>
-    </ion-refresher>
+<!--    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">-->
+<!--        <ion-refresher-content></ion-refresher-content>-->
+<!--    </ion-refresher>-->
     <div *ngIf="itemList">
-        <ion-card *ngFor="let item of activeItems(); index as i" [ngClass]="{'done': item.status==='complete'}">
+        <ion-reorder-group (ionItemReorder)="doReorder($event)" disabled="false">
+        <ion-card id="{{item.id}}" *ngFor="let item of activeItems(); index as i" [ngClass]="{'done': item.status==='complete'}">
             <ion-item>
                 <ion-icon *ngIf="item.status==='new'" name="checkmark-circle-outline" slot="start"
                           (click)="toggleComplete(item.id)">
@@ -31,6 +32,7 @@
                 </ion-icon>
                 <ion-label class="hover card-title"
                            (click)="modify(item)">{{item.title}}</ion-label>
+                <ion-reorder slot="end"></ion-reorder>
                 <ion-button fill="clear" slot="end" (click)="delete(item.id)">
                     <ion-icon name="trash"></ion-icon>
                 </ion-button>
@@ -41,7 +43,9 @@
                 {{item.description}}
             </ion-card-content>
         </ion-card>
+        </ion-reorder-group>
     </div>
+
     <!-- Skeleton screen -->
     <div *ngIf="!itemList">
         <ion-card>

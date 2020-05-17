@@ -12,6 +12,7 @@ export declare class Todo {
   readonly createdAt?: string;
   readonly doneAt?: string;
   readonly archivedAt?: string;
+  readonly order?: number;
   constructor(init: ModelInit<Todo>);
   static copyOf(source: Todo, mutator: (draft: MutableModel<Todo>) => MutableModel<Todo> | void): Todo;
 }
