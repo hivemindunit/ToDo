@@ -23,7 +23,7 @@
     <div *ngIf="itemList">
         <ion-reorder-group (ionItemReorder)="doReorder($event)" disabled="false">
         <ion-card id="{{item.id}}" *ngFor="let item of activeItems(); index as i" [ngClass]="{'done': item.status==='complete'}">
-            <ion-item>
+            <ion-item [lines]="item.description ? 'inset': 'none'">
                 <ion-icon *ngIf="item.status==='new'" name="checkmark-circle-outline" slot="start"
                           (click)="toggleComplete(item.id)">
                 </ion-icon>
