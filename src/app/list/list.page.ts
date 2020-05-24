@@ -1,14 +1,16 @@
 import {Component, OnInit, AfterContentInit, Input, ViewChild} from '@angular/core';
 import {IonReorderGroup, ModalController} from '@ionic/angular';
-import {ToDoList} from '../classes/item.class';
+import {ToDoList, ToDoItem} from '../classes/item.class';
 import {Events} from '../events.service';
 import {ItemPage} from './item/item.page';
 import {AuthGuard} from '../auth.guard';
 import {AmplifyService} from 'aws-amplify-angular';
 import {Router} from '@angular/router';
 import {DataStore} from '@aws-amplify/datastore';
-import {Todo} from '../../models';
+// import {Todo} from '../../models';
 import {Auth} from 'aws-amplify';
+// import { AngularFirestore } from 'angularfire2/firestore';
+import { Todo, TodoService } from '../todo.service';
 
 @Component({
     selector: 'app-list-page',
@@ -23,6 +25,9 @@ export class ListPage implements OnInit, AfterContentInit {
     user: any;
     itemList: ToDoList;
     signedIn: boolean;
+    fireStoreTaskList: any;
+    fireStoreList: any;
+    todos: Todo[];
 
     authState: any;
     // including AuthGuardService here so that it's available to listen to auth events
@@ -33,7 +38,8 @@ export class ListPage implements OnInit, AfterContentInit {
                 public events: Events,
                 public guard: AuthGuard,
                 public amplify: AmplifyService,
-                private router: Router) {
+                private router: Router,
+                private todoService: TodoService) {
         this.authState = {loggedIn: false};
         this.authService = guard;
         this.amplifyService = amplify;
@@ -59,11 +65,15 @@ export class ListPage implements OnInit, AfterContentInit {
     }
 
     activeItems() {
-        const items = this.itemList.items.filter(item => item.status !== 'archived');
-        return items.sort(this.compareItem);
+        const items = this.itemList.items; //.filter(item => item.status !== 'archived');
+        return items; //.sort(this.compareItem);
     }
 
     async ngOnInit() {
+        this.todoService.getTodos().subscribe(res => {
+            // console.log(res);
+            this.todos = res;
+        });
     }
 
     ngAfterContentInit() {
@@ -95,16 +105,31 @@ export class ListPage implements OnInit, AfterContentInit {
     }
 
     private async loadData() {
-        DataStore.query(Todo, item => item.status('notContains', 'archived')).then(res => {
-            res = res.sort(this.compareItem);
-            this.itemList = {
-                    userId: this.user.userId,
-                    // @ts-ignore
-                    // items: res.data.listTodos.items
-                    items: res
-                };
-            }
-        );
+        // DataStore.query(Todo, item => item.status('notContains', 'archived')).then(res => {
+        //     res = res.sort(this.compareItem);
+        //     this.itemList = {
+        //             userId: this.user.userId,
+        //             // @ts-ignore
+        //             // items: res.data.listTodos.items
+        //             items: res
+        //         };
+        //     }
+        // );
+        // this.afAuth.authState.subscribe(user => {
+        //     if (user) {
+        //         this.userId = user.uid
+        // const todoItems = this.fireStore.doc<any>('users/' + this.user.userId).collection('tasks');
+        // this.fireStoreTaskList = this.fireStore.doc<any>('users/' + this.user.userId).collection('tasks').valueChanges();
+        // this.fireStoreList = this.fireStore.doc<any>('users/' + this.user.userId).collection('tasks');
+            // }
+        // });
+        // console.log(this.fireStoreList);
+        // this.itemList = {
+        //         userId: this.user.userId,
+        //         // @ts-ignore
+        //         // items: res.data.listTodos.items
+        //         items: this.fireStoreList
+        //     };
     }
 
     async modify(item) {
@@ -123,40 +148,60 @@ export class ListPage implements OnInit, AfterContentInit {
             componentProps: props
         });
         this.modal.onDidDismiss().then((result) => {
+            console.log(result);
             if (typeof result.data !== 'undefined') {
                 if (result.data.newItem) {
                     // ...and add a new item if modal passes back newItem
-                    const items = result.data.itemList.items.filter(item => item.status !== 'archived');
+                    // const items = result.data.itemList.items; //.filter(item => item.status !== 'archived');
                     // console.log(items);
-                    let itemOrder;
-                    if (items.length === 0) {
-                        itemOrder = 0;
-                    } else {
-                        itemOrder = items[items.length - 1].order + 1;
-                    }
+                    // let itemOrder;
+                    // if (items.length === 0) {
+                    //     itemOrder = 0;
+                    // } else {
+                    //     itemOrder = items[items.length - 1].order + 1;
+                    // }
                     // console.log(items.length);
-                    const newItem = new Todo({
+                    // const id = this.fireStore.createId();
+                    // todo: Todo = {
+                    //     task: 'test',
+                    //     createdAt: new Date().getTime(),
+                    //     priority: 2
+                    // };
+                    const newItem: Todo = {
+                        // id: id,
                         title: result.data.newItem.title,
                         ...(typeof result.data.newItem.description === 'string' && {
                             description: result.data.newItem.description
                         }),
+                        createdAt: new Date().getTime(),
                         status: result.data.newItem.status,
-                        order: itemOrder
+                        // order: itemOrder
+                        order: 0
+                    };
+                    // result.data.itemList.items.push(newItem);
+                    // DataStore.save(newItem);
+                    // console.log(Object.assign({}, newItem));
+                    // this.fireStoreList.doc(newItem.id).set(Object.assign({}, newItem));
+                    this.todoService.addTodo(newItem).then(() => {
+                        // loading.dismiss();
+                        // this.nav.goBack('home');
                     });
-                    result.data.itemList.items.push(newItem);
-                    DataStore.save(newItem);
                 } else if (result.data.editItem) {
                     // ...or splice the items array if the modal passes back editItem
-                    const editItem = result.data.editItem;
-                    const i = this.itemList.items.findIndex(element => element.id === editItem.id);
-                    result.data.itemList.items[i] = editItem;
-                    DataStore.query(Todo, editItem.id).then(original => {
-                        DataStore.save(
-                            Todo.copyOf(original, updated => {
-                                updated.title = editItem.title;
-                                updated.description = editItem.description;
-                            })
-                        );
+                    // const editItem = result.data.editItem;
+                    // const i = this.itemList.items.findIndex(element => element.id === editItem.id);
+                    // result.data.itemList.items[i] = editItem;
+                    // DataStore.query(Todo, editItem.id).then(original => {
+                    //     DataStore.save(
+                    //         Todo.copyOf(original, updated => {
+                    //             updated.title = editItem.title;
+                    //             updated.description = editItem.description;
+                    //         })
+                    //     );
+                    // });
+                    this.todoService.updateTodo(result.data.editItem, result.data.editItem.id).then(() => {
+                        // loading.dismiss();
+                        // this.nav.goBack('home');
                     });
                 }
                 this.modal.dismiss({
@@ -168,37 +213,22 @@ export class ListPage implements OnInit, AfterContentInit {
     }
 
     async delete(id) {
-        const i = this.itemList.items.findIndex(element => element.id === id);
-        this.itemList.items.splice(i, 1);
-        DataStore.query(Todo, id).then(original => {
-            DataStore.save(
-                Todo.copyOf(original, updated => {
-                    updated.status = 'archived';
-                    updated.archivedAt = Date.now().toString();
-                })
-            );
-        });
+        await this.todoService.removeTodo(id);
     }
 
     async toggleComplete(id) {
-        const i = this.itemList.items.findIndex(element => element.id === id);
-        const item = this.itemList.items[i];
-        let targetState: string;
-        let doneAt: string = item.doneAt;
-        if (item.status === 'new') {
-            targetState = 'complete';
-            doneAt = Date.now().toString();
-        } else {
-            targetState = 'new';
-        }
-        DataStore.query(Todo, item.id).then(original => {
-            DataStore.save(
-                Todo.copyOf(original, updated => {
-                    updated.status = targetState;
-                    updated.doneAt = doneAt;
-                })
-            );
-            this.loadData();
+        this.todoService.getTodo(id).then(snapshot => {
+            const item = snapshot.data() as Todo;
+            if (item.status === 'new') {
+                item.status = 'complete';
+                item.doneAt = new Date().getTime();
+            } else {
+                item.status = 'new';
+                if (typeof item.doneAt !== 'undefined') {
+                    delete item.doneAt;
+                }
+            }
+            this.todoService.updateTodo(item, id);
         });
     }
 
@@ -211,7 +241,7 @@ export class ListPage implements OnInit, AfterContentInit {
         // when the drag started and ended, respectively
         // console.log(ev);
         let fromIndex, toIndex;
-        const items = this.itemList.items;
+        const items = this.todos; //this.itemList.items;
         // in some cases detail.from or detail.to exceeds array boundaries. The code below is to correct that
         if (ev.detail.from > items.length - 1) {
             fromIndex = items.length - 1;
@@ -223,23 +253,39 @@ export class ListPage implements OnInit, AfterContentInit {
         } else {
             toIndex = ev.detail.to;
         }
+        console.log(items);
         // Moving target element to new place
+        console.log('fromIndex', fromIndex);
+        console.log('toIndex', toIndex);
         const itemMove = items.splice(fromIndex, 1)[0];
         items.splice(toIndex, 0, itemMove);
         // Correcting orders according to the new order
+        console.log(items);
         for (let i = 0; i < items.length; i++) {
-            await DataStore.query(Todo, items[i].id).then(ori => {
-                DataStore.save(
-                    Todo.copyOf(ori, updated => {
-                        updated.order = i;
-                    })
-                );
+            const item = items[i] as Todo;
+            console.log(item.id);
+            // console.log(i);
+            item.order = i;
+            this.todoService.getTodo(item.id).then(snapshot => {
+                const savedItem = snapshot.data() as Todo;
+                console.log(savedItem);
+                if (savedItem.order !== i) {
+                    console.log('saving', item.id);
+                    this.todoService.updateTodo(item, item.id);
+                }
+                // this.todoService.updateTodo(item, id);
             });
+            // if (item.order !== i) {
+            // }
         }
-        this.itemList.items = items;
+        // this.itemList.items = items;
         // await this.loadData();
         // Finish the reorder and position the item in the DOM based on
         // where the gesture ended.
         ev.detail.complete();
+        this.todoService.getTodos().subscribe(res => {
+            // console.log(res);
+            this.todos = res;
+        });
     }
 }

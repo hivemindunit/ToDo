@@ -12,6 +12,10 @@ import { AmplifyAngularModule, AmplifyIonicModule, AmplifyService } from 'aws-am
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
+import { AngularFireModule } from 'angularfire2';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { firebaseConfig } from './config';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -21,7 +25,9 @@ import { environment } from '../environments/environment';
     AppRoutingModule,
     AmplifyAngularModule,
     AmplifyIonicModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFirestoreModule
   ],
   providers: [
     StatusBar,
