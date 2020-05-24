@@ -23,7 +23,7 @@ export class TodoService {
   private todos: Observable<Todo[]>;
 
   constructor(db: AngularFirestore) {
-    this.todosCollection = db.collection<Todo>('todos');
+    this.todosCollection = db.collection<Todo>('todos', ref => ref.orderBy('order'));
 
     this.todos = this.todosCollection.snapshotChanges().pipe(
         map(actions => {
@@ -41,11 +41,15 @@ export class TodoService {
   }
 
   getTodo(id) {
-    return this.todosCollection.doc<Todo>(id).get().toPromise(); // .then(doc => {
+    return this.todosCollection.doc<Todo>(id).get().toPromise();
   }
 
   updateTodo(todo: Todo, id: string) {
     return this.todosCollection.doc(id).update(todo);
+  }
+
+  updateTodoAttributes(updatedAttributes: {}, id: string) {
+    return this.todosCollection.doc(id).set(updatedAttributes, { merge: true });
   }
 
   addTodo(todo: Todo) {

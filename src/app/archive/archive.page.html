@@ -10,8 +10,9 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <div *ngIf="itemList">
-    <ion-card *ngFor="let item of archivedItems(); index as i" [ngClass]="{'done': item.status==='complete'}">
+  <div *ngIf="todos">
+    <div *ngFor="let item of todos; index as i">
+    <ion-card *ngIf="item.status==='archived'">
       <ion-item>
         <ion-icon *ngIf="item.status==='new'" name="checkmark-circle-outline" slot="start">
         </ion-icon>
@@ -27,9 +28,10 @@
         {{item.description}}
       </ion-card-content>
     </ion-card>
+    </div>
   </div>
   <!-- Skeleton screen -->
-  <div *ngIf="!itemList">
+  <div *ngIf="!todos">
     <ion-card>
       <ion-item>
         <ion-label class="hover card-title">
