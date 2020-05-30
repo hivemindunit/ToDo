@@ -1,9 +1,0 @@
-type Todo @model @auth(rules: [{allow: owner}]) {
-  id: ID!
-  owner: String
-  name: String!
-  description: String
-  createdAt: String
-  doneAt: String
-  archivedAt: String
-}
