@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import {environment} from '../../environments/environment';
-// import {APP_URL} from '../config';
 
 @Injectable({
     providedIn: 'root'
@@ -101,7 +100,7 @@ export class AuthenticationService {
         return this.ngFireAuth.auth.signInWithPopup(provider)
             .then((result) => {
                 this.ngZone.run(() => {
-                    this.router.navigate(['dashboard']);
+                    this.router.navigateByUrl('/');
                 });
                 this.SetUserData(result.user);
             }).catch((error) => {

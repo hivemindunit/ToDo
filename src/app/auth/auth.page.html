@@ -14,7 +14,18 @@
                 <ion-button (click)="signOut()">Sign out</ion-button>
             </ion-col>
         </ion-row>
+
         <div *ngIf="!this.authService.isLoggedIn">
+            <ion-row class="ion-justify-content-center">
+                <ion-col size-md="4">
+                    <div class="ion-text-center">
+                        <ion-button (click)="this.authService.GoogleAuth()">
+                            <ion-icon slot="start" name="logo-google"></ion-icon>
+                            Log in with Google
+                        </ion-button>
+                    </div>
+                </ion-col>
+            </ion-row>
             <ion-row class="ion-justify-content-center">
                 <ion-col size-md="4">
                     <form [formGroup]="loginForm" (ngSubmit)="login()" novalidate>

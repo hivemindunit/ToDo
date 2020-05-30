@@ -26,7 +26,7 @@ export class TodoService {
 
   constructor(db: AngularFirestore, authService: AuthenticationService, private ngFireAuth: AngularFireAuth) {
     this.ngFireAuth.authState.subscribe(user => {
-      console.log('loading data...');
+      // console.log('loading data...');
       this.todosCollection = db.collection<Todo>('users/' + authService.userData.uid + '/todos', ref => ref.orderBy('order'));
 
       this.todos = this.todosCollection.snapshotChanges().pipe(
