@@ -4,7 +4,8 @@ import { User } from './user';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
-import {APP_URL} from '../config';
+import {environment} from '../../environments/environment';
+// import {APP_URL} from '../config';
 
 @Injectable({
     providedIn: 'root'
@@ -48,7 +49,7 @@ export class AuthenticationService {
         const actionCodeSettings = {
             // URL you want to redirect back to. The domain (www.example.com) for this
             // URL must be whitelisted in the Firebase Console.
-            url: APP_URL + '/auth',
+            url: environment.appUrl + '/auth',
             // This must be true.
             // handleCodeInApp: true,
             // iOS: {
