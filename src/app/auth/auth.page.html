@@ -8,13 +8,13 @@
 </ion-header>
 <ion-content>
     <ion-grid>
-        <ion-row *ngIf="statusDefined && userName" class="ion-justify-content-center">
+        <ion-row *ngIf="this.authService.isLoggedIn" class="ion-justify-content-center">
             <ion-col size-md="4">
-                <p>Logged in as {{userName}}</p>
+                <p>Logged in as {{this.authService.userData.email}}</p>
                 <ion-button (click)="signOut()">Sign out</ion-button>
             </ion-col>
         </ion-row>
-        <div *ngIf="statusDefined && !userName">
+        <div *ngIf="!this.authService.isLoggedIn">
             <ion-row class="ion-justify-content-center">
                 <ion-col size-md="4">
                     <form [formGroup]="loginForm" (ngSubmit)="login()" novalidate>

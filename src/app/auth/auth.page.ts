@@ -13,8 +13,6 @@ import {AuthenticationService} from '../shared/authentication-service';
 export class AuthPage implements OnInit {
     loginForm: FormGroup;
     validationError: string;
-    userName: string;
-    statusDefined = false;
     isSubmitted = false;
 
     constructor(
@@ -30,15 +28,6 @@ export class AuthPage implements OnInit {
             email: ['', [Validators.required]], // Validators.pattern('^[0-9]+$')]],
             password: ['', [Validators.required]]
         });
-    }
-
-    async ionViewWillEnter() {
-        const loading = await this.loadingController.create({
-            message: 'Please wait...'
-        });
-        await loading.present();
-        this.statusDefined = true;
-        await loading.dismiss();
     }
 
     get errorControl() {

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, NgForm, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {LoadingController} from '@ionic/angular';
+import {AuthenticationService} from '../shared/authentication-service';
 
 @Component({
     selector: 'app-restore-access',
@@ -13,10 +13,12 @@ export class RestoreAccessPage implements OnInit {
     verifyForm: FormGroup;
     isSubmitted = false;
     codeSent = false;
-    validationError = false;
     username = '';
 
-    constructor(private router: Router, public loadingController: LoadingController, public formBuilder: FormBuilder) {
+    constructor(
+        public loadingController: LoadingController,
+        public formBuilder: FormBuilder,
+        public authService: AuthenticationService) {
     }
 
     ngOnInit() {
@@ -34,10 +36,6 @@ export class RestoreAccessPage implements OnInit {
         return this.restoreAccessForm.controls;
     }
 
-    get verifyFormErrorControl() {
-        return this.verifyForm.controls;
-    }
-
     async submit() {
         this.isSubmitted = true;
         if (!this.restoreAccessForm.valid) {
@@ -47,66 +45,13 @@ export class RestoreAccessPage implements OnInit {
                 message: 'Please wait...'
             });
             await loading.present();
-            console.log(this.restoreAccessForm.value.phone);
-            // Auth.forgotPassword(this.restoreAccessForm.value.phone.toString()).then((result) => {
-            //     console.log(result);
-            //     loading.dismiss();
-            //     this.validationError = null;
-            //     this.codeSent = true;
-            //     this.isSubmitted = false;
-            //     this.verifyForm.controls.email.setValue(this.restoreAccessForm.value.phone);
-            // }).catch(error => {
-            //     this.isSubmitted = false;
-            //     loading.dismiss();
-            //     this.validationError = error.message;
-            // });
-        }
-    }
-
-    async verify() {
-        this.isSubmitted = true;
-        if (!this.verifyForm.valid) {
-            return false;
-        } else {
-            const loading = await this.loadingController.create({
-                message: 'Please wait...'
+            console.log(this.restoreAccessForm.value.email);
+            this.authService.PasswordRecover(this.restoreAccessForm.value.email).then(res => {
+                console.log(res);
+                loading.dismiss();
+                this.codeSent = true;
+                this.isSubmitted = false;
             });
-            await loading.present();
-            // Auth.forgotPasswordSubmit(
-            //     this.verifyForm.value.phone.toString(),
-            //     this.verifyForm.value.code.toString(),
-            //     this.verifyForm.value.password.toString()).then((result) => {
-            //     loading.dismiss();
-            //     this.validationError = null;
-            //     this.router.navigateByUrl('/auth');
-            // }).catch(error => {
-            //     this.isSubmitted = false;
-            //     loading.dismiss();
-            //     this.validationError = error.message;
-            // });
-        }
-    }
-
-    async resendCode() {
-        this.isSubmitted = true;
-        if (!this.restoreAccessForm.value.phone) {
-            // @ts-ignore
-            this.validationError = 'Phone is required';
-            return false;
-        } else {
-            const loading = await this.loadingController.create({
-                message: 'Please wait...'
-            });
-            await loading.present();
-            // Auth.resendSignUp(this.restoreAccessForm.value.phone.toString()).then((result) => {
-            //     loading.dismiss();
-            //     this.validationError = null;
-            //     this.isSubmitted = false;
-            // }).catch(error => {
-            //     this.isSubmitted = false;
-            //     loading.dismiss();
-            //     this.validationError = error.message;
-            // });
         }
     }
 }

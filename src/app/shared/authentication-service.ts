@@ -13,6 +13,7 @@ import {environment} from '../../environments/environment';
 
 export class AuthenticationService {
     userData: any;
+    actionCodeSettings: any;
 
     constructor(
         public afStore: AngularFirestore,
@@ -20,6 +21,22 @@ export class AuthenticationService {
         public router: Router,
         public ngZone: NgZone
     ) {
+        this.actionCodeSettings = {
+            // URL you want to redirect back to. The domain (www.example.com) for this
+            // URL must be whitelisted in the Firebase Console.
+            url: environment.appUrl + '/auth',
+            // This must be true.
+            // handleCodeInApp: true,
+            // iOS: {
+            //     bundleId: 'com.example.ios'
+            // },
+            // android: {
+            //     packageName: 'com.example.android',
+            //     installApp: true,
+            //     minimumVersion: '12'
+            // },
+            // dynamicLinkDomain: 'example.page.link'
+        };
         this.ngFireAuth.authState.subscribe(user => {
             // console.log('authState fired');
             // console.log(user);
@@ -46,23 +63,7 @@ export class AuthenticationService {
 
     // Email verification when new user register
     SendVerificationMail() {
-        const actionCodeSettings = {
-            // URL you want to redirect back to. The domain (www.example.com) for this
-            // URL must be whitelisted in the Firebase Console.
-            url: environment.appUrl + '/auth',
-            // This must be true.
-            // handleCodeInApp: true,
-            // iOS: {
-            //     bundleId: 'com.example.ios'
-            // },
-            // android: {
-            //     packageName: 'com.example.android',
-            //     installApp: true,
-            //     minimumVersion: '12'
-            // },
-            // dynamicLinkDomain: 'example.page.link'
-        };
-        return this.ngFireAuth.auth.currentUser.sendEmailVerification(actionCodeSettings);
+        return this.ngFireAuth.auth.currentUser.sendEmailVerification(this.actionCodeSettings);
             // .then(() => {
             //     this.router.navigate(['verify-email']);
             // });
@@ -70,9 +71,9 @@ export class AuthenticationService {
 
     // Recover password
     PasswordRecover(passwordResetEmail) {
-        return this.ngFireAuth.auth.sendPasswordResetEmail(passwordResetEmail)
+        return this.ngFireAuth.auth.sendPasswordResetEmail(passwordResetEmail, this.actionCodeSettings)
             .then(() => {
-                window.alert('Password reset email has been sent, please check your inbox.');
+                // window.alert('Password reset email has been sent, please check your inbox.');
             }).catch((error) => {
                 window.alert(error);
             });
