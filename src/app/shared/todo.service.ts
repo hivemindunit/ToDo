@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import {AuthenticationService} from './authentication-service';
+import {AngularFireAuth} from '@angular/fire/auth';
 
 export interface Todo {
   id?: string;
@@ -22,18 +24,21 @@ export class TodoService {
   private todosCollection: AngularFirestoreCollection<Todo>;
   private todos: Observable<Todo[]>;
 
-  constructor(db: AngularFirestore) {
-    this.todosCollection = db.collection<Todo>('todos', ref => ref.orderBy('order'));
+  constructor(db: AngularFirestore, authService: AuthenticationService, private ngFireAuth: AngularFireAuth) {
+    this.ngFireAuth.authState.subscribe(user => {
+      console.log('loading data...');
+      this.todosCollection = db.collection<Todo>('users/' + authService.userData.uid + '/todos', ref => ref.orderBy('order'));
 
-    this.todos = this.todosCollection.snapshotChanges().pipe(
-        map(actions => {
-          return actions.map(a => {
-            const data = a.payload.doc.data();
-            const id = a.payload.doc.id;
-            return { id, ...data };
-          });
-        })
-    );
+      this.todos = this.todosCollection.snapshotChanges().pipe(
+          map(actions => {
+            return actions.map(a => {
+              const data = a.payload.doc.data();
+              const id = a.payload.doc.id;
+              return { id, ...data };
+            });
+          })
+      );
+    });
   }
 
   getTodos() {

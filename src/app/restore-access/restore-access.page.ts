@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, NgForm, Validators} from '@angular/forms';
-import {Auth} from 'aws-amplify';
 import {Router} from '@angular/router';
 import {LoadingController} from '@ionic/angular';
 
@@ -22,10 +21,10 @@ export class RestoreAccessPage implements OnInit {
 
     ngOnInit() {
         this.restoreAccessForm = this.formBuilder.group({
-            phone: ['', [Validators.required]] // Validators.pattern('^[0-9]+$')]],
+            email: ['', [Validators.required]] // Validators.pattern('^[0-9]+$')]],
         });
         this.verifyForm = this.formBuilder.group({
-            phone: ['', [Validators.required]], // Validators.pattern('^[0-9]+$')]],
+            email: ['', [Validators.required]], // Validators.pattern('^[0-9]+$')]],
             code: ['', [Validators.required]],
             password: ['', [Validators.required]]
         });
@@ -49,18 +48,18 @@ export class RestoreAccessPage implements OnInit {
             });
             await loading.present();
             console.log(this.restoreAccessForm.value.phone);
-            Auth.forgotPassword(this.restoreAccessForm.value.phone.toString()).then((result) => {
-                console.log(result);
-                loading.dismiss();
-                this.validationError = null;
-                this.codeSent = true;
-                this.isSubmitted = false;
-                this.verifyForm.controls.phone.setValue(this.restoreAccessForm.value.phone);
-            }).catch(error => {
-                this.isSubmitted = false;
-                loading.dismiss();
-                this.validationError = error.message;
-            });
+            // Auth.forgotPassword(this.restoreAccessForm.value.phone.toString()).then((result) => {
+            //     console.log(result);
+            //     loading.dismiss();
+            //     this.validationError = null;
+            //     this.codeSent = true;
+            //     this.isSubmitted = false;
+            //     this.verifyForm.controls.email.setValue(this.restoreAccessForm.value.phone);
+            // }).catch(error => {
+            //     this.isSubmitted = false;
+            //     loading.dismiss();
+            //     this.validationError = error.message;
+            // });
         }
     }
 
@@ -73,18 +72,18 @@ export class RestoreAccessPage implements OnInit {
                 message: 'Please wait...'
             });
             await loading.present();
-            Auth.forgotPasswordSubmit(
-                this.verifyForm.value.phone.toString(),
-                this.verifyForm.value.code.toString(),
-                this.verifyForm.value.password.toString()).then((result) => {
-                loading.dismiss();
-                this.validationError = null;
-                this.router.navigateByUrl('/auth');
-            }).catch(error => {
-                this.isSubmitted = false;
-                loading.dismiss();
-                this.validationError = error.message;
-            });
+            // Auth.forgotPasswordSubmit(
+            //     this.verifyForm.value.phone.toString(),
+            //     this.verifyForm.value.code.toString(),
+            //     this.verifyForm.value.password.toString()).then((result) => {
+            //     loading.dismiss();
+            //     this.validationError = null;
+            //     this.router.navigateByUrl('/auth');
+            // }).catch(error => {
+            //     this.isSubmitted = false;
+            //     loading.dismiss();
+            //     this.validationError = error.message;
+            // });
         }
     }
 
@@ -99,15 +98,15 @@ export class RestoreAccessPage implements OnInit {
                 message: 'Please wait...'
             });
             await loading.present();
-            Auth.resendSignUp(this.restoreAccessForm.value.phone.toString()).then((result) => {
-                loading.dismiss();
-                this.validationError = null;
-                this.isSubmitted = false;
-            }).catch(error => {
-                this.isSubmitted = false;
-                loading.dismiss();
-                this.validationError = error.message;
-            });
+            // Auth.resendSignUp(this.restoreAccessForm.value.phone.toString()).then((result) => {
+            //     loading.dismiss();
+            //     this.validationError = null;
+            //     this.isSubmitted = false;
+            // }).catch(error => {
+            //     this.isSubmitted = false;
+            //     loading.dismiss();
+            //     this.validationError = error.message;
+            // });
         }
     }
 }

@@ -45,11 +45,6 @@
             "AmplifyAppId": "d405jj7qg3l0t"
         },
         "categories": {
-            "auth": {
-                "todotogether13f1772f": {
-                    "hostedUIProviderCreds": "[]"
-                }
-            },
             "hosting": {
                 "amplifyhosting": {
                     "appId": "d405jj7qg3l0t",

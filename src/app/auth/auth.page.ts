@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {Hub, Auth} from 'aws-amplify';
 import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {LoadingController} from '@ionic/angular';
-import {AmplifyService} from 'aws-amplify-angular';
+import {AuthenticationService} from '../shared/authentication-service';
 
 @Component({
     selector: 'app-auth',
@@ -17,24 +16,18 @@ export class AuthPage implements OnInit {
     userName: string;
     statusDefined = false;
     isSubmitted = false;
-    amplifyService: AmplifyService;
 
     constructor(
         private router: Router,
         public loadingController: LoadingController,
         public formBuilder: FormBuilder,
-        public amplify: AmplifyService) {
+        public authService: AuthenticationService) {
         this.validationError = null;
-        this.amplifyService = amplify;
-        Hub.listen('auth', (data) => {
-            const {payload} = data;
-            this.onAuthEvent(payload);
-        });
     }
 
     async ngOnInit() {
         this.loginForm = this.formBuilder.group({
-            phone: ['', [Validators.required]], // Validators.pattern('^[0-9]+$')]],
+            email: ['', [Validators.required]], // Validators.pattern('^[0-9]+$')]],
             password: ['', [Validators.required]]
         });
     }
@@ -44,27 +37,12 @@ export class AuthPage implements OnInit {
             message: 'Please wait...'
         });
         await loading.present();
-        Auth.currentUserInfo()
-            .then(info => {
-                this.statusDefined = true;
-                if (info !== null) {
-                    this.userName = info.attributes.phone_number;
-                }
-                loading.dismiss();
-            });
+        this.statusDefined = true;
+        await loading.dismiss();
     }
 
     get errorControl() {
         return this.loginForm.controls;
-    }
-
-    onAuthEvent(payload) {
-        if (payload.event === 'signIn') {
-            this.router.navigateByUrl('/');
-        } else if (payload.event === 'signOut') {
-            this.userName = undefined;
-            this.statusDefined = true;
-        }
     }
 
     async login() {
@@ -77,10 +55,19 @@ export class AuthPage implements OnInit {
                 message: 'Please wait...'
             });
             await loading.present();
-            Auth.signIn(this.loginForm.value.phone.toString(), this.loginForm.value.password.toString()).then((result) => {
-                loading.dismiss();
-                this.validationError = null;
-            }).catch(error => {
+            this.authService.SignIn(this.loginForm.value.email.toString(), this.loginForm.value.password.toString())
+                .then((res) => {
+                    console.log(res);
+                    if (res.user.emailVerified) {
+                        loading.dismiss();
+                        this.validationError = null;
+                        this.router.navigateByUrl('/');
+                    } else {
+                        loading.dismiss();
+                        this.validationError = 'Email is not verified';
+                        return false;
+                    }
+                }).catch((error) => {
                 loading.dismiss();
                 this.validationError = error.message;
             });
@@ -88,6 +75,8 @@ export class AuthPage implements OnInit {
     }
 
     signOut() {
-        this.amplifyService.auth().signOut();
+        this.authService.SignOut().then(res => {
+            this.router.navigateByUrl('/auth');
+        });
     }
 }

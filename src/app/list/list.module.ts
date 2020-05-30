@@ -4,10 +4,8 @@ import { CommonModule } from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { ListPage } from './list.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
-
 import { ListPageRoutingModule } from './list-routing.module';
 import { ItemPage } from './item/item.page';
-import { AmplifyAngularModule, AmplifyIonicModule, AmplifyService } from 'aws-amplify-angular';
 import {ItemPageModule} from './item/item.module';
 
 @NgModule({
@@ -17,8 +15,6 @@ import {ItemPageModule} from './item/item.module';
         FormsModule,
         ExploreContainerComponentModule,
         ListPageRoutingModule,
-        AmplifyAngularModule,
-        AmplifyIonicModule,
         ReactiveFormsModule,
         ItemPageModule
     ],
@@ -27,6 +23,6 @@ import {ItemPageModule} from './item/item.module';
     ListPage,
     ItemPage
   ],
-  providers: [AmplifyService]
+  providers: []
 })
 export class ListPageModule {}

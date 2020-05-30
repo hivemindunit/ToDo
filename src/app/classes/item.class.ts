@@ -2,7 +2,7 @@ import { v4 as uuid } from 'uuid';
 
 export class ToDoList {
     userId: any;
-    items: Array<ToDoItem>
+    items: Array<ToDoItem>;
 
     constructor(params) {
         this.items = params.items || [];

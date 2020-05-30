@@ -20,13 +20,13 @@
                     <form [formGroup]="loginForm" (ngSubmit)="login()" novalidate>
                         <ion-list lines="full" class="ion-no-margin ion-no-padding">
                             <ion-item>
-                                <ion-label position="floating">Phone
+                                <ion-label position="floating">Email
                                     <ion-text color="danger">*</ion-text>
                                 </ion-label>
-                                <ion-input type="text" formControlName="phone"></ion-input>
+                                <ion-input type="email" formControlName="email"></ion-input>
                             </ion-item>
-                            <ion-text color="danger" *ngIf="isSubmitted && errorControl.phone.errors?.required">
-                                <sub>Phone is required</sub>
+                            <ion-text color="danger" *ngIf="isSubmitted && errorControl.email.errors?.required">
+                                <sub>Email is required</sub>
                             </ion-text>
                             <ion-item>
                                 <ion-label position="floating">Password
@@ -38,7 +38,6 @@
                                 <sub>Password is required</sub>
                             </ion-text>
                         </ion-list>
-
                         <div class="ion-padding">
                             <ion-button expand="block" type="submit" class="ion-no-margin">Login</ion-button>
                         </div>
@@ -48,9 +47,7 @@
             <ion-row class="ion-justify-content-center" *ngIf="this.validationError">
                 <ion-col size-md="4">
                     <div class="ion-text-center">
-                        <ion-chip>
-                            <ion-label color="danger">{{validationError}}</ion-label>
-                        </ion-chip>
+                        <ion-text color="danger">{{validationError}}</ion-text>
                     </div>
                 </ion-col>
             </ion-row>
@@ -72,5 +69,4 @@
             </ion-row>
         </div>
     </ion-grid>
-    <!--    <amplify-authenticator framework="ionic"></amplify-authenticator>-->
 </ion-content>

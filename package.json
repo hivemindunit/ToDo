@@ -1,6 +1,6 @@
 {
   "name": "todo",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Alexander Tsimbalistov",
   "homepage": "",
   "scripts": {
@@ -10,9 +10,7 @@
     "build:prod": "rm -rf www && ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "amplify-modelgen": "node amplify/scripts/amplify-modelgen.js",
-    "amplify-push": "node amplify/scripts/amplify-push.js"
+    "e2e": "ng e2e"
   },
   "private": true,
   "dependencies": {
@@ -30,8 +28,6 @@
     "@ionic-native/status-bar": "^5.26.0",
     "@ionic/angular": "^5.1.1",
     "angularfire2": "^5.4.2",
-    "aws-amplify": "^3.0.12",
-    "aws-amplify-angular": "^5.0.12",
     "core-js": "^2.5.4",
     "firebase": "^7.14.5",
     "moment": "^2.26.0",
@@ -65,5 +61,5 @@
     "tslint": "~5.15.0",
     "typescript": "~3.8.3"
   },
-  "description": "An Ionic project"
+  "description": "Yet Another To-Do Application"
 }

@@ -1,39 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import {Component} from '@angular/core';
 import {Router} from '@angular/router';
-import { Todo, TodoService } from '../todo.service';
+import {Todo, TodoService} from '../shared/todo.service';
+import {AngularFireAuth} from '@angular/fire/auth';
 
 @Component({
   selector: 'app-archive',
   templateUrl: './archive.page.html',
   styleUrls: ['./archive.page.scss'],
 })
-export class ArchivePage implements OnInit {
-  // itemList: ToDoList;
-  user: any;
+export class ArchivePage {
   todos: Todo[];
-  // amplifyService: AmplifyService;
-  constructor(// public amplify: AmplifyService,
-              private router: Router,
+  constructor(private router: Router,
+              public ngFireAuth: AngularFireAuth,
               private todoService: TodoService) {
-    // this.amplifyService = amplify;
-  }
-
-  async ngOnInit() {
-    this.todoService.getTodos().subscribe(res => {
-      // console.log(res);
-      this.todos = res;
-    });
-  }
-
-  async ionViewWillEnter() {
-    // if (this.user != null) {
-    //   await this.loadData();
-    // }
-  }
-
-  private async loadData() {
-    this.todoService.getTodos().subscribe(res => {
-      this.todos = res;
+    this.ngFireAuth.authState.subscribe(user => {
+      this.todoService.getTodos().subscribe(res => {
+        this.todos = res;
+      });
     });
   }
 

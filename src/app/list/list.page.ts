@@ -1,11 +1,11 @@
-import {Component, OnInit, AfterContentInit, Input, ViewChild} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {IonReorderGroup, ModalController} from '@ionic/angular';
 import {Events} from '../events.service';
 import {ItemPage} from './item/item.page';
-import {AuthGuard} from '../auth.guard';
 import {Router} from '@angular/router';
-import {Auth} from 'aws-amplify';
-import { Todo, TodoService } from '../todo.service';
+import {Todo, TodoService} from '../shared/todo.service';
+import {AuthenticationService} from '../shared/authentication-service';
+import {AngularFireAuth} from '@angular/fire/auth';
 
 @Component({
     selector: 'app-list-page',
@@ -13,58 +13,22 @@ import { Todo, TodoService } from '../todo.service';
     styleUrls: ['list.page.scss']
 })
 
-export class ListPage implements OnInit, AfterContentInit {
+export class ListPage {
     @ViewChild(IonReorderGroup, {static: true}) reorderGroup: IonReorderGroup;
     modal: any;
-    data: any;
-    user: any;
-    signedIn: boolean;
     todos: Todo[];
-
-    authState: any;
-    // including AuthGuardService here so that it's available to listen to auth events
-    authService: AuthGuard;
 
     constructor(public modalController: ModalController,
                 public events: Events,
-                public guard: AuthGuard,
-                // public amplify: AmplifyService,
                 private router: Router,
+                public authService: AuthenticationService,
+                public ngFireAuth: AngularFireAuth,
                 private todoService: TodoService) {
-        this.authState = {loggedIn: false};
-        this.authService = guard;
-    }
-
-    async ngOnInit() {
-        this.todoService.getTodos().subscribe(res => {
-            // console.log(res);
-            this.todos = res;
+        this.ngFireAuth.authState.subscribe(user => {
+            this.todoService.getTodos().subscribe(res => {
+                this.todos = res;
+            });
         });
-    }
-
-    ngAfterContentInit() {
-    }
-
-    async ionViewWillEnter() {
-        // Use AWS Amplify to get user data when creating items
-        try {
-            this.user = await Auth.currentAuthenticatedUser();
-        } catch (err) {
-            console.log(err);
-            if (err === 'not authenticated') {
-                await this.router.navigate(['/auth']);
-            } else {
-                console.log(err);
-            }
-        }
-        if (this.user == null) {
-            await this.router.navigate(['/auth']);
-        } else {
-            await this.loadData();
-        }
-    }
-
-    private async loadData() {
     }
 
     async modify(item) {
@@ -158,7 +122,7 @@ export class ListPage implements OnInit, AfterContentInit {
         for (let i = 0; i < ids.length; i++) {
             if (this.todos.find(x => x.id === ids[i]).order !== i) {
                 this.todoService.updateTodoAttributes({order: i}, ids[i]).then(r => {
-                        ev.detail.complete();
+                    ev.detail.complete();
                 });
             }
         }
