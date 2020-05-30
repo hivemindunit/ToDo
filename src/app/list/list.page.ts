@@ -25,9 +25,13 @@ export class ListPage {
                 public ngFireAuth: AngularFireAuth,
                 private todoService: TodoService) {
         this.ngFireAuth.authState.subscribe(user => {
-            this.todoService.getTodos().subscribe(res => {
-                this.todos = res;
-            });
+            if (user) {
+                this.todoService.getTodos().subscribe(res => {
+                    this.todos = res;
+                });
+            } else {
+                router.navigate(['auth']);
+            }
         });
     }
 
