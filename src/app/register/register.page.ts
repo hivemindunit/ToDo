@@ -83,6 +83,11 @@ export class RegisterPage implements OnInit {
     await loading.present();
     this.authService.SendVerificationMail().then(res => {
       loading.dismiss();
+    })
+    .catch(error => {
+        loading.dismiss();
+        this.validationError = error.message;
+        console.log(error);
     });
   }
 }
