@@ -38,6 +38,7 @@ export class TodoService {
               });
             })
         );
+        this.cleanUp();
       }
     });
   }
@@ -64,5 +65,19 @@ export class TodoService {
 
   removeTodo(id) {
     return this.todosCollection.doc(id).delete();
+  }
+
+  private async cleanUp() {
+    let obsoleteTodos;
+    const oneDayAgo = Math.round((new Date()).getTime() / 1000 - 60 * 60 * 24);
+    this.todos.subscribe(res => {
+      obsoleteTodos = res.filter((o) => o.status === 'archived');
+      for (const item of obsoleteTodos) {
+        const itemArchivedAt = parseInt(String(item.archivedAt / 1000), 10);
+        if (itemArchivedAt < oneDayAgo) {
+          this.removeTodo(item.id);
+        }
+      }
+    });
   }
 }
