@@ -99,10 +99,6 @@ export class ListPage {
         });
     }
 
-    // doRefresh(event) {
-    //     this.loadData().then(event.target.complete());
-    // }
-
     async doReorder(ev: any) {
         // The `from` and `to` properties contain the index of the item
         // when the drag started and ended, respectively
@@ -133,5 +129,21 @@ export class ListPage {
         // Finish the reorder and position the item in the DOM based on
         // where the gesture ended.
         ev.detail.complete();
+    }
+
+    isArchiveEmpty() {
+        if (this.todos) {
+            return this.todos.filter((o) => o.status === 'archived').length === 0;
+        } else {
+            return true;
+        }
+    }
+
+    notDoneItemsCount() {
+        if (this.todos) {
+            return this.todos.filter((o) => o.status === 'new').length;
+        } else {
+            return 0;
+        }
     }
 }
