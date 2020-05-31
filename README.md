@@ -1,4 +1,4 @@
-![](assets/icons/android-chrome-192x192.png)
+![](src/assets/icons/android-chrome-192x192.png)
 # Yet Another ToDo List
 > Your simple and cross-platform application for personal productivity: https://www.get-it-done.ninja/
 
