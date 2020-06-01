@@ -50,7 +50,6 @@ export class ListPage {
             componentProps: props
         });
         this.modal.onDidDismiss().then((result) => {
-            console.log(result);
             if (typeof result.data !== 'undefined') {
                 if (result.data.newItem) {
                     // ...and add a new item if modal passes back newItem
@@ -84,19 +83,17 @@ export class ListPage {
     }
 
     async toggleComplete(id) {
-        this.todoService.getTodo(id).then(snapshot => {
-            const item = snapshot.data() as Todo;
-            if (item.status === 'new') {
-                item.status = 'complete';
-                item.doneAt = new Date().getTime();
-            } else {
-                item.status = 'new';
-                if (typeof item.doneAt !== 'undefined') {
-                    delete item.doneAt;
-                }
+        const item = this.todos.find(x => x.id === id);
+        if (item.status === 'new') {
+            item.status = 'complete';
+            item.doneAt = new Date().getTime();
+        } else {
+            item.status = 'new';
+            if (typeof item.doneAt !== 'undefined') {
+                delete item.doneAt;
             }
-            this.todoService.updateTodo(item, id);
-        });
+        }
+        this.todoService.updateTodo(item, id);
     }
 
     async doReorder(ev: any) {
