@@ -81,7 +81,7 @@
 </ion-content>
 <ion-footer class="ion-no-border">
     <ion-toolbar>
-        <ion-title *ngIf="notDoneItemsCount() > 0; else notEmptyTodoList" color="medium" size="small">{{notDoneItemsCount()}} reasons to keep going</ion-title>
+        <ion-title *ngIf="notDoneItemsCount() > 0; else notEmptyTodoList" color="medium" size="small">{{maybePluralize(notDoneItemsCount(), 'reason')}} to keep going</ion-title>
         <ng-template #notEmptyTodoList>
             <ion-title color="medium" size="small">Everything's done. Yippee!</ion-title>
         </ng-template>
