@@ -6,7 +6,6 @@ import {Router} from '@angular/router';
 import {Todo, TodoService} from '../shared/todo.service';
 import {AuthenticationService} from '../shared/authentication-service';
 import {AngularFireAuth} from '@angular/fire/auth';
-import {pluralize} from 'pluralize';
 
 @Component({
     selector: 'app-list-page',

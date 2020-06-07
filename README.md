@@ -6,3 +6,14 @@
 - UI: Ionic 5
 - Backend: Firebase
 - CI/CD & Hosting: AWS Amplify
+
+## Build & Run
+### Development
+```
+ionic serve
+```
+### Production
+```
+npm run build:prod
+firebase deploy
+```
