@@ -147,4 +147,12 @@ export class ListPage {
     maybePluralize(count, noun, suffix = 's') {
         return `${count} ${noun}${count !== 1 ? suffix : ''}`;
     }
+
+    completedPercentage() {
+        if (typeof(this.todos) !== 'undefined') {
+            return this.todos.filter((o) => o.status === 'complete').length / this.todos.length;
+        } else {
+            return 0;
+        }
+    }
 }
