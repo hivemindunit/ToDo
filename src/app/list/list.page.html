@@ -3,8 +3,11 @@
         <ion-buttons slot="start">
             <ion-menu-button autoHide="false"></ion-menu-button>
             <ion-button [routerLink]="['/archive']">
-                <ion-icon *ngIf="isArchiveEmpty(); else notEmptyArchive" name="file-tray-outline" slot="start"></ion-icon>
-                <ng-template #notEmptyArchive><ion-icon name="file-tray-full-outline" slot="start"></ion-icon></ng-template>
+                <ion-icon *ngIf="isArchiveEmpty(); else notEmptyArchive" name="file-tray-outline"
+                          slot="start"></ion-icon>
+                <ng-template #notEmptyArchive>
+                    <ion-icon name="file-tray-full-outline" slot="start"></ion-icon>
+                </ng-template>
                 Archive
             </ion-button>
         </ion-buttons>
@@ -19,70 +22,81 @@
 </ion-header>
 <ion-content>
     <div *ngIf="todos">
-        <ion-reorder-group (ionItemReorder)="doReorder($event)" disabled="{{!reorderEnabled}}">
-            <div *ngFor="let item of todos; index as i">
-                <ion-card *ngIf="item.status!=='archived'" id="{{item.id}}"
-                          [ngClass]="{'done': item.status==='complete'}">
-                    <ion-item [lines]="item.description ? 'inset': 'none'">
+        <ion-list>
+            <ion-reorder-group (ionItemReorder)="doReorder($event)" disabled="{{!reorderEnabled}}">
+                <ion-item-sliding *ngFor="let item of todos; index as i">
+                    <ion-item *ngIf="item.status!=='archived'" id="{{item.id}}"
+                              [ngClass]="{'done': item.status==='complete'}"
+                              [attr.lines]="i != activeTodos().length-1 ? 'full' : 'none'">
                         <ion-icon *ngIf="item.status==='new'" name="checkmark-circle-outline" slot="start"
                                   (click)="toggleComplete(item.id)">
                         </ion-icon>
                         <ion-icon *ngIf="item.status==='complete'" name="checkmark-circle" slot="start" class="complete"
                                   (click)="toggleComplete(item.id)">
                         </ion-icon>
-                        <ion-label class="hover card-title"
-                                   (click)="modify(item)">{{item.title}}</ion-label>
+                        <ion-label href="#" (click)="modify(item)" class="ion-text-wrap"><h2>{{item.title}}</h2>
+                            <p>{{item.description}}</p>
+                        </ion-label>
                         <ion-reorder slot="end"></ion-reorder>
                         <ion-button fill="clear" slot="end" (click)="delete(item.id)">
                             <ion-icon name="trash"></ion-icon>
                         </ion-button>
                     </ion-item>
-                    <ion-card-content *ngIf="item.description"
-                                      (click)="modify(item)"
-                                      class="hover card-title">
-                        {{item.description}}
-                    </ion-card-content>
-                </ion-card>
-            </div>
-        </ion-reorder-group>
+                    <ion-item-options side="start" (ionSwipe)="toggleComplete(item.id)">
+                        <ion-item-option color="success" expandable="true" (click)="toggleComplete(item.id)">
+                            <ion-icon slot="icon-only" name="checkmark-circle"></ion-icon>
+                        </ion-item-option>
+                    </ion-item-options>
+                    <ion-item-options side="end" (ionSwipe)="delete(item.id)">
+                        <ion-item-option color="danger" expandable="true" (click)="delete(item.id)">
+                            <ion-icon slot="icon-only" name="trash"></ion-icon>
+                        </ion-item-option>
+                    </ion-item-options>
+                </ion-item-sliding>
+            </ion-reorder-group>
+        </ion-list>
     </div>
     <!-- Skeleton screen -->
     <div *ngIf="!todos">
-        <ion-card>
+        <ion-list>
             <ion-item>
-                <ion-label class="hover card-title">
-                    <ion-skeleton-text animated></ion-skeleton-text>
+                <ion-label class="ion-text-wrap">
+                    <h2>
+                        <ion-skeleton-text animated></ion-skeleton-text>
+                    </h2>
+                    <p>
+                        <ion-skeleton-text animated></ion-skeleton-text>
+                    </p>
                 </ion-label>
             </ion-item>
-            <ion-card-content class="hover card-title">
-                <ion-skeleton-text animated></ion-skeleton-text>
-            </ion-card-content>
-        </ion-card>
-        <ion-card>
             <ion-item>
-                <ion-label class="hover card-title">
-                    <ion-skeleton-text animated></ion-skeleton-text>
+                <ion-label class="ion-text-wrap">
+                    <h2>
+                        <ion-skeleton-text animated></ion-skeleton-text>
+                    </h2>
+                    <p>
+                        <ion-skeleton-text animated></ion-skeleton-text>
+                    </p>
                 </ion-label>
             </ion-item>
-            <ion-card-content class="hover card-title">
-                <ion-skeleton-text animated></ion-skeleton-text>
-            </ion-card-content>
-        </ion-card>
-        <ion-card>
             <ion-item>
-                <ion-label class="hover card-title">
-                    <ion-skeleton-text animated></ion-skeleton-text>
+                <ion-label class="ion-text-wrap">
+                    <h2>
+                        <ion-skeleton-text animated></ion-skeleton-text>
+                    </h2>
+                    <p>
+                        <ion-skeleton-text animated></ion-skeleton-text>
+                    </p>
                 </ion-label>
             </ion-item>
-            <ion-card-content class="hover card-title">
-                <ion-skeleton-text animated></ion-skeleton-text>
-            </ion-card-content>
-        </ion-card>
+        </ion-list>
     </div>
 </ion-content>
 <ion-footer class="ion-no-border">
     <ion-toolbar>
-        <ion-title *ngIf="notDoneItemsCount() > 0 && todos; else notEmptyTodoList" color="medium" size="small">{{maybePluralize(notDoneItemsCount(), 'reason')}} to keep going</ion-title>
+        <ion-title *ngIf="notDoneItemsCount() > 0 && todos; else notEmptyTodoList" color="medium"
+                   size="small">{{maybePluralize(notDoneItemsCount(), 'reason')}} to keep going
+        </ion-title>
         <ng-template #notEmptyTodoList>
             <ion-title color="medium" size="small">Everything's done. Yippee!</ion-title>
         </ng-template>

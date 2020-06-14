@@ -85,7 +85,27 @@ export class ListPage {
             status: 'archived',
             archivedAt: new Date().getTime()
         }, id);
-        await this.notify('Item deleted');
+        const toast = await this.toastController.create({
+            message: 'Item deleted',
+            duration: 2500,
+            buttons: [
+                {
+                    side: 'end',
+                    icon: 'refresh',
+                    role: 'cancel',
+                    text: 'Revert',
+                    handler: () => {
+                        this.todoService.getTodo(id).then(snapshot => {
+                            const item = snapshot.data() as Todo;
+                            delete item.doneAt;
+                            item.status = 'new';
+                            this.todoService.updateTodo(item, id);
+                        });
+                    }
+                }
+            ]
+        });
+        await toast.present();
     }
 
     async toggleComplete(id) {
@@ -156,7 +176,7 @@ export class ListPage {
 
     completedPercentage() {
         if (typeof(this.todos) !== 'undefined') {
-            return this.todos.filter((o) => o.status === 'complete').length / this.todos.length;
+            return this.todos.filter((o) => o.status === 'complete').length / this.activeTodos().length;
         } else {
             return 0;
         }
@@ -168,5 +188,9 @@ export class ListPage {
             duration: 1000
         });
         await toast.present();
+    }
+
+    activeTodos() {
+        return this.todos.filter((o) => o.status !== 'archived');
     }
 }
