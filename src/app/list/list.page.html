@@ -24,8 +24,8 @@
     <div *ngIf="todos">
         <ion-list>
             <ion-reorder-group (ionItemReorder)="doReorder($event)" disabled="{{!reorderEnabled}}">
-                <ion-item-sliding *ngFor="let item of activeTodos(); index as i">
-                    <ion-item id="{{item.id}}"
+                <ion-item-sliding *ngFor="let item of todos; index as i">
+                    <ion-item *ngIf="item.status!=='archived'" id="{{item.id}}"
                               [ngClass]="{'done': item.status==='complete'}"
                               [attr.lines]="i != activeTodos().length-1 ? 'full' : 'none'">
                         <ion-icon *ngIf="item.status==='new'" name="checkmark-circle-outline" slot="start"

@@ -11,56 +11,75 @@
 </ion-header>
 <ion-content>
   <div *ngIf="todos">
-    <div *ngFor="let item of todos; index as i">
-    <ion-card *ngIf="item.status==='archived'">
-      <ion-item>
-        <ion-icon *ngIf="item.status==='new'" name="checkmark-circle-outline" slot="start">
-        </ion-icon>
-        <ion-icon *ngIf="item.status==='complete'" name="checkmark-circle" slot="start" class="complete">
-        </ion-icon>
-        <ion-label class="hover card-title">{{item.title}}</ion-label>
-        <ion-button fill="clear" slot="end" (click)="revert(item.id)">
-          <ion-icon name="arrow-undo-outline"></ion-icon>
-        </ion-button>
-      </ion-item>
-      <ion-card-content *ngIf="item.description"
-                        class="hover card-title">
-        {{item.description}}
-      </ion-card-content>
-    </ion-card>
-    </div>
+    <ion-list>
+        <div *ngFor="let item of archivedTodos(); index as i">
+          <ion-item id="{{item.id}}"
+                    [ngClass]="{'done': item.status==='complete'}"
+                    [attr.lines]="i != archivedTodos().length-1 ? 'full' : 'none'">
+            <ion-label class="ion-text-wrap"><h2>{{item.title}}</h2>
+              <p>{{item.description}}</p>
+            </ion-label>
+            <ion-button fill="clear" slot="end" (click)="revert(item.id)">
+              <ion-icon name="arrow-undo-outline"></ion-icon>
+            </ion-button>
+          </ion-item>
+        </div>
+    </ion-list>
   </div>
+
+<!--  <div *ngIf="todos">-->
+<!--    <div *ngFor="let item of todos; index as i">-->
+<!--    <ion-card *ngIf="item.status==='archived'">-->
+<!--      <ion-item>-->
+<!--        <ion-icon *ngIf="item.status==='new'" name="checkmark-circle-outline" slot="start">-->
+<!--        </ion-icon>-->
+<!--        <ion-icon *ngIf="item.status==='complete'" name="checkmark-circle" slot="start" class="complete">-->
+<!--        </ion-icon>-->
+<!--        <ion-label class="hover card-title">{{item.title}}</ion-label>-->
+<!--        <ion-button fill="clear" slot="end" (click)="revert(item.id)">-->
+<!--          <ion-icon name="arrow-undo-outline"></ion-icon>-->
+<!--        </ion-button>-->
+<!--      </ion-item>-->
+<!--      <ion-card-content *ngIf="item.description"-->
+<!--                        class="hover card-title">-->
+<!--        {{item.description}}-->
+<!--      </ion-card-content>-->
+<!--    </ion-card>-->
+<!--    </div>-->
+<!--  </div>-->
   <!-- Skeleton screen -->
   <div *ngIf="!todos">
-    <ion-card>
+    <ion-list>
       <ion-item>
-        <ion-label class="hover card-title">
-          <ion-skeleton-text animated></ion-skeleton-text>
+        <ion-label class="ion-text-wrap">
+          <h2>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </h2>
+          <p>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </p>
         </ion-label>
       </ion-item>
-      <ion-card-content class="hover card-title">
-        <ion-skeleton-text animated></ion-skeleton-text>
-      </ion-card-content>
-    </ion-card>
-    <ion-card>
       <ion-item>
-        <ion-label class="hover card-title">
-          <ion-skeleton-text animated></ion-skeleton-text>
+        <ion-label class="ion-text-wrap">
+          <h2>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </h2>
+          <p>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </p>
         </ion-label>
       </ion-item>
-      <ion-card-content class="hover card-title">
-        <ion-skeleton-text animated></ion-skeleton-text>
-      </ion-card-content>
-    </ion-card>
-    <ion-card>
       <ion-item>
-        <ion-label class="hover card-title">
-          <ion-skeleton-text animated></ion-skeleton-text>
+        <ion-label class="ion-text-wrap">
+          <h2>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </h2>
+          <p>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </p>
         </ion-label>
       </ion-item>
-      <ion-card-content class="hover card-title">
-        <ion-skeleton-text animated></ion-skeleton-text>
-      </ion-card-content>
-    </ion-card>
+    </ion-list>
   </div>
 </ion-content>

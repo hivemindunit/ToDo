@@ -20,6 +20,10 @@ export class ArchivePage {
     });
   }
 
+  archivedTodos() {
+    return this.todos.filter((o) => o.status === 'archived');
+  }
+
   async revert(id: string) {
     this.todoService.getTodo(id).then(snapshot => {
       const item = snapshot.data() as Todo;
