@@ -85,7 +85,27 @@ export class ListPage {
             status: 'archived',
             archivedAt: new Date().getTime()
         }, id);
-        await this.notify('Item deleted');
+        const toast = await this.toastController.create({
+            message: 'Item deleted',
+            duration: 2500,
+            buttons: [
+                {
+                    side: 'end',
+                    icon: 'refresh',
+                    role: 'cancel',
+                    text: 'Revert',
+                    handler: () => {
+                        this.todoService.getTodo(id).then(snapshot => {
+                            const item = snapshot.data() as Todo;
+                            delete item.doneAt;
+                            item.status = 'new';
+                            this.todoService.updateTodo(item, id);
+                        });
+                    }
+                }
+            ]
+        });
+        await toast.present();
     }
 
     async toggleComplete(id) {
