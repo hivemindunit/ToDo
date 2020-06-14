@@ -25,16 +25,16 @@ export class AuthenticationService {
             // URL must be whitelisted in the Firebase Console.
             url: environment.appUrl + '/auth',
             // This must be true.
-            // handleCodeInApp: true,
-            // iOS: {
-            //     bundleId: 'com.example.ios'
-            // },
-            // android: {
-            //     packageName: 'com.example.android',
-            //     installApp: true,
-            //     minimumVersion: '12'
-            // },
-            // dynamicLinkDomain: 'example.page.link'
+            handleCodeInApp: true,
+            iOS: {
+                bundleId: 'com.getitdone.ios'
+            },
+            android: {
+                packageName: 'com.getitdone.android',
+                installApp: true,
+                minimumVersion: '12'
+            },
+            dynamicLinkDomain: 'getitdone.page.link'
         };
         this.ngFireAuth.authState.subscribe(user => {
             // console.log('authState fired');
@@ -78,7 +78,7 @@ export class AuthenticationService {
             });
     }
 
-    // Returns true when user is looged in
+    // Returns true when user is logged in
     get isLoggedIn(): boolean {
         const user = JSON.parse(localStorage.getItem('user'));
         return (user !== null && user.emailVerified !== false) ? true : false;
