@@ -71,11 +71,4 @@ export class ItemPage implements OnInit {
   cancel() {
     this.modalController.dismiss({itemList: this.itemList});
   }
-
-  // ionViewWillEnter() {
-  //   this.backButtonService.quitOnBackButton = true;
-  // }
-  // ionViewWillLeave() {
-  //   this.backButtonService.quitOnBackButton = false;
-  // }
 }

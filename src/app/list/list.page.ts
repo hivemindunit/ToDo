@@ -6,6 +6,7 @@ import {Router} from '@angular/router';
 import {Todo, TodoService} from '../shared/todo.service';
 import {AuthenticationService} from '../shared/authentication-service';
 import {AngularFireAuth} from '@angular/fire/auth';
+import {ToastController} from '@ionic/angular';
 
 @Component({
     selector: 'app-list-page',
@@ -24,7 +25,8 @@ export class ListPage {
                 private router: Router,
                 public authService: AuthenticationService,
                 public ngFireAuth: AngularFireAuth,
-                private todoService: TodoService) {
+                private todoService: TodoService,
+                public toastController: ToastController) {
         this.ngFireAuth.authState.subscribe(user => {
             if (user) {
                 this.todoService.getTodos().subscribe(res => {
@@ -64,9 +66,11 @@ export class ListPage {
                         order: this.todos.length + 1
                     };
                     this.todoService.addTodo(newItem);
+                    this.notify('Item added');
                 } else if (result.data.editItem) {
                     // ...or splice the items array if the modal passes back editItem
                     this.todoService.updateTodo(result.data.editItem, result.data.editItem.id);
+                    this.notify('Item updated');
                 }
                 this.modal.dismiss({
                     dismissed: true
@@ -81,6 +85,7 @@ export class ListPage {
             status: 'archived',
             archivedAt: new Date().getTime()
         }, id);
+        await this.notify('Item deleted');
     }
 
     async toggleComplete(id) {
@@ -155,5 +160,13 @@ export class ListPage {
         } else {
             return 0;
         }
+    }
+
+    async notify(title: string) {
+        const toast = await this.toastController.create({
+            message: title,
+            duration: 1000
+        });
+        await toast.present();
     }
 }
