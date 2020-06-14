@@ -156,7 +156,7 @@ export class ListPage {
 
     completedPercentage() {
         if (typeof(this.todos) !== 'undefined') {
-            return this.todos.filter((o) => o.status === 'complete').length / this.todos.length;
+            return this.todos.filter((o) => o.status === 'complete').length / this.activeTodos().length;
         } else {
             return 0;
         }
@@ -168,5 +168,9 @@ export class ListPage {
             duration: 1000
         });
         await toast.present();
+    }
+
+    activeTodos() {
+        return this.todos.filter((o) => o.status !== 'archived');
     }
 }
