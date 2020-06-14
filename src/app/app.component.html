@@ -8,6 +8,11 @@
     <ion-header>
       <ion-toolbar>
         <ion-title>ToDo</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="menu.close()">
+            <ion-icon slot="icon-only" name="close"></ion-icon>
+          </ion-button>
+         </ion-buttons>
       </ion-toolbar>
     </ion-header>
     <ion-content>
