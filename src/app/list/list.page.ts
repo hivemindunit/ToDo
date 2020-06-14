@@ -17,6 +17,7 @@ export class ListPage {
     @ViewChild(IonReorderGroup, {static: true}) reorderGroup: IonReorderGroup;
     modal: any;
     todos: Todo[];
+    reorderEnabled: true;
 
     constructor(public modalController: ModalController,
                 public events: Events,

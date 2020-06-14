@@ -19,7 +19,7 @@
 </ion-header>
 <ion-content>
     <div *ngIf="todos">
-        <ion-reorder-group (ionItemReorder)="doReorder($event)" disabled="false">
+        <ion-reorder-group (ionItemReorder)="doReorder($event)" disabled="{{!reorderEnabled}}">
             <div *ngFor="let item of todos; index as i">
                 <ion-card *ngIf="item.status!=='archived'" id="{{item.id}}"
                           [ngClass]="{'done': item.status==='complete'}">
@@ -81,10 +81,14 @@
     </div>
 </ion-content>
 <ion-footer class="ion-no-border">
-    <ion-toolbar *ngIf="todos">
-        <ion-title *ngIf="notDoneItemsCount() > 0; else notEmptyTodoList" color="medium" size="small">{{maybePluralize(notDoneItemsCount(), 'reason')}} to keep going</ion-title>
+    <ion-toolbar>
+        <ion-title *ngIf="notDoneItemsCount() > 0 && todos; else notEmptyTodoList" color="medium" size="small">{{maybePluralize(notDoneItemsCount(), 'reason')}} to keep going</ion-title>
         <ng-template #notEmptyTodoList>
             <ion-title color="medium" size="small">Everything's done. Yippee!</ion-title>
         </ng-template>
+        <ion-buttons slot="end">
+            <ion-title size="small">Reorder</ion-title>
+            <ion-toggle [(ngModel)]="reorderEnabled"></ion-toggle>
+        </ion-buttons>
     </ion-toolbar>
 </ion-footer>
