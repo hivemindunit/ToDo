@@ -86,36 +86,23 @@
 <!--    </div>-->
     <!-- Skeleton screen -->
     <div *ngIf="!todos">
-        <ion-card>
+        <ion-list>
+                    <ion-item>
+                        <ion-label class="ion-text-wrap"><h2><ion-skeleton-text animated></ion-skeleton-text></h2>
+                            <p><ion-skeleton-text animated></ion-skeleton-text></p>
+                        </ion-label>
+                    </ion-item>
             <ion-item>
-                <ion-label class="hover card-title">
-                    <ion-skeleton-text animated></ion-skeleton-text>
+                <ion-label class="ion-text-wrap"><h2><ion-skeleton-text animated></ion-skeleton-text></h2>
+                    <p><ion-skeleton-text animated></ion-skeleton-text></p>
                 </ion-label>
             </ion-item>
-            <ion-card-content class="hover card-title">
-                <ion-skeleton-text animated></ion-skeleton-text>
-            </ion-card-content>
-        </ion-card>
-        <ion-card>
             <ion-item>
-                <ion-label class="hover card-title">
-                    <ion-skeleton-text animated></ion-skeleton-text>
+                <ion-label class="ion-text-wrap"><h2><ion-skeleton-text animated></ion-skeleton-text></h2>
+                    <p><ion-skeleton-text animated></ion-skeleton-text></p>
                 </ion-label>
             </ion-item>
-            <ion-card-content class="hover card-title">
-                <ion-skeleton-text animated></ion-skeleton-text>
-            </ion-card-content>
-        </ion-card>
-        <ion-card>
-            <ion-item>
-                <ion-label class="hover card-title">
-                    <ion-skeleton-text animated></ion-skeleton-text>
-                </ion-label>
-            </ion-item>
-            <ion-card-content class="hover card-title">
-                <ion-skeleton-text animated></ion-skeleton-text>
-            </ion-card-content>
-        </ion-card>
+        </ion-list>
     </div>
 </ion-content>
 <ion-footer class="ion-no-border">
