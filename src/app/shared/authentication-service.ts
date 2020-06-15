@@ -34,7 +34,7 @@ export class AuthenticationService {
                 installApp: true,
                 minimumVersion: '12'
             },
-            dynamicLinkDomain: 'getitdone.page.link'
+            dynamicLinkDomain: environment.dynamicLinkDomain
         };
         this.ngFireAuth.authState.subscribe(user => {
             // console.log('authState fired');
