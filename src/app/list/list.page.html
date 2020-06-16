@@ -27,7 +27,7 @@
                 <ion-item-sliding *ngFor="let item of todos; index as i">
                     <ion-item *ngIf="item.status!=='archived'" id="{{item.id}}"
                               [ngClass]="{'done': item.status==='complete'}"
-                              [attr.lines]="i != activeTodos().length-1 ? 'full' : 'none'">
+                              lines="full">
                         <ion-icon *ngIf="item.status==='new'" name="checkmark-circle-outline" slot="start"
                                   (click)="toggleComplete(item.id)">
                         </ion-icon>
