@@ -93,7 +93,7 @@ export class ListPage {
                     side: 'end',
                     icon: 'refresh',
                     role: 'cancel',
-                    text: 'Revert',
+                    text: 'Undo',
                     handler: () => {
                         this.todoService.getTodo(id).then(snapshot => {
                             const item = snapshot.data() as Todo;
