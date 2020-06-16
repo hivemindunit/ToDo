@@ -4,7 +4,9 @@ import { User } from './user';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { Platform } from '@ionic/angular';
 import {environment} from '../../environments/environment';
+import {cfaSignIn} from 'capacitor-firebase-auth';
 
 @Injectable({
     providedIn: 'root'
@@ -18,7 +20,8 @@ export class AuthenticationService {
         public afStore: AngularFirestore,
         public ngFireAuth: AngularFireAuth,
         public router: Router,
-        public ngZone: NgZone
+        public ngZone: NgZone,
+        public platform: Platform
     ) {
         this.actionCodeSettings = {
             // URL you want to redirect back to. The domain (www.example.com) for this
@@ -27,10 +30,10 @@ export class AuthenticationService {
             // This must be true.
             handleCodeInApp: true,
             iOS: {
-                bundleId: 'com.getitdone.ios'
+                bundleId: 'com.atsimbalistov.getitdone'
             },
             android: {
-                packageName: 'com.getitdone.android',
+                packageName: 'com.atsimbalistov.getitdone',
                 installApp: true,
                 minimumVersion: '12'
             },
@@ -92,7 +95,18 @@ export class AuthenticationService {
 
     // Sign in with Gmail
     GoogleAuth() {
-        return this.AuthLogin(new auth.GoogleAuthProvider());
+        if (this.platform.is('android')) {
+            cfaSignIn('google.com').subscribe(
+                (user: User) => this.router.navigateByUrl('/')
+            );
+        } else if (this.platform.is('ios')) {
+            // console.log("running on iOS device!");
+        } else {
+            return this.AuthLogin(new auth.GoogleAuthProvider()).catch(function(error) {
+                console.log(error.message);
+            });
+        }
+
     }
 
     // Auth providers

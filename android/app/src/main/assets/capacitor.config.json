@@ -1,9 +1,19 @@
 {
-  "appId": "com.getitdone",
+  "appId": "com.atsimbalistov.getitdone",
   "appName": "get-it-done",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
   "cordova": {},
-  "linuxAndroidStudioPath": "/home/administrator/android-studio/bin/studio.sh"
+  "linuxAndroidStudioPath": "/home/administrator/android-studio/bin/studio.sh",
+  "plugins": {
+    "CapacitorFirebaseAuth": {
+      "providers": ["google.com", "email"],
+      "languageCode": "en",
+      "nativeAuth": false,
+      "permissions": {
+        "google": ["profile"]
+      }
+    }
+  }
 }
