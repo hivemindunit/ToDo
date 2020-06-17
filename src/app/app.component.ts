@@ -28,11 +28,11 @@ export class AppComponent {
         private popoverCtrl: PopoverController,
         private router: Router,
         private toast: ToastController) {
+        this.initializeApp();
+        // Initialize BackButton Eevent.
         this.platform.backButton.subscribeWithPriority(10, () => {
             console.log('Handler was called!');
         });
-        this.initializeApp();
-        // Initialize BackButton Eevent.
         this.backButtonEvent();
     }
 

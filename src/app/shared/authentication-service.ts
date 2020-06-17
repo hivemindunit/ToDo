@@ -6,7 +6,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Platform } from '@ionic/angular';
 import {environment} from '../../environments/environment';
-import {cfaSignIn} from 'capacitor-firebase-auth';
+import {cfaSignIn, cfaSignOut} from 'capacitor-firebase-auth';
 
 @Injectable({
     providedIn: 'root'
@@ -95,18 +95,15 @@ export class AuthenticationService {
 
     // Sign in with Gmail
     GoogleAuth() {
-        if (this.platform.is('android')) {
+        if (this.platform.is('android') || this.platform.is('ios')) {
             cfaSignIn('google.com').subscribe(
                 (user: User) => this.router.navigateByUrl('/')
             );
-        } else if (this.platform.is('ios')) {
-            // console.log("running on iOS device!");
         } else {
             return this.AuthLogin(new auth.GoogleAuthProvider()).catch(function(error) {
                 console.log(error.message);
             });
         }
-
     }
 
     // Auth providers
@@ -139,9 +136,14 @@ export class AuthenticationService {
 
     // Sign-out
     SignOut() {
-        return this.ngFireAuth.auth.signOut().then(() => {
-            localStorage.removeItem('user');
-            this.router.navigate(['login']);
-        });
+        if (this.platform.is('android') || this.platform.is('ios')) {
+            cfaSignOut().subscribe();
+        } else {
+            return this.ngFireAuth.auth.signOut().then(() => {
+                localStorage.removeItem('user');
+                this.router.navigate(['login']);
+            });
+        }
+
     }
 }
