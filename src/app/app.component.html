@@ -1,8 +1,3 @@
-<!--<ion-button *ngIf="user" [routerLink]="['/auth']">-->
-<!--  <ion-icon slot="icon-only" name="person-circle"></ion-icon>-->
-<!--</ion-button>-->
-<!--<ion-button *ngIf="user" (click)="this.signOut();">Sign Out-->
-<!--</ion-button>-->
 <ion-app>
   <ion-menu contentId="main" side="start">
     <ion-header>
@@ -18,13 +13,13 @@
     <ion-content>
       <ion-menu-toggle>
         <ion-list>
-          <ion-item [routerLink]="['/auth']">
-            <ion-label>Profile</ion-label>
-            <ion-icon name="person-circle-outline"></ion-icon>
-          </ion-item>
           <ion-item [routerLink]="['/']">
             <ion-label>Task list</ion-label>
             <ion-icon name="list-circle-outline"></ion-icon>
+          </ion-item>
+          <ion-item [routerLink]="['/auth']">
+            <ion-label>Profile</ion-label>
+            <ion-icon name="person-circle-outline"></ion-icon>
           </ion-item>
         </ion-list>
       </ion-menu-toggle>
