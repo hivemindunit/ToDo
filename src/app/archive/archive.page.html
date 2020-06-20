@@ -24,29 +24,11 @@
             </ion-button>
           </ion-item>
         </div>
+      <ion-item lines="none">
+        <ion-note>Note: archived items are being deleted permanently after 24 hours</ion-note>
+      </ion-item>
     </ion-list>
   </div>
-
-<!--  <div *ngIf="todos">-->
-<!--    <div *ngFor="let item of todos; index as i">-->
-<!--    <ion-card *ngIf="item.status==='archived'">-->
-<!--      <ion-item>-->
-<!--        <ion-icon *ngIf="item.status==='new'" name="checkmark-circle-outline" slot="start">-->
-<!--        </ion-icon>-->
-<!--        <ion-icon *ngIf="item.status==='complete'" name="checkmark-circle" slot="start" class="complete">-->
-<!--        </ion-icon>-->
-<!--        <ion-label class="hover card-title">{{item.title}}</ion-label>-->
-<!--        <ion-button fill="clear" slot="end" (click)="revert(item.id)">-->
-<!--          <ion-icon name="arrow-undo-outline"></ion-icon>-->
-<!--        </ion-button>-->
-<!--      </ion-item>-->
-<!--      <ion-card-content *ngIf="item.description"-->
-<!--                        class="hover card-title">-->
-<!--        {{item.description}}-->
-<!--      </ion-card-content>-->
-<!--    </ion-card>-->
-<!--    </div>-->
-<!--  </div>-->
   <!-- Skeleton screen -->
   <div *ngIf="!todos">
     <ion-list>

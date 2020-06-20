@@ -115,7 +115,7 @@ export class ListPage implements OnInit {
             status: 'archived',
             archivedAt: new Date().getTime()
         }, id);
-        await this.notify('Item deleted', true, id);
+        await this.notify('Item archived', true, id);
     }
 
     async toggleComplete(id) {
