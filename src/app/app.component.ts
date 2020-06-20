@@ -2,9 +2,8 @@ import {Component, QueryList, ViewChildren} from '@angular/core';
 import {Platform, IonRouterOutlet, ModalController, MenuController, ActionSheetController, PopoverController} from '@ionic/angular';
 import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
-// import {Router} from '@angular/router';
 import {ToastController} from '@ionic/angular';
-import {Plugins} from '@capacitor/core';
+import {Plugins, StatusBarStyle} from '@capacitor/core';
 import {environment} from '../environments/environment';
 
 const { AdMob } = Plugins;
@@ -23,23 +22,17 @@ export class AppComponent {
 
     constructor(
         private platform: Platform,
-        private splashScreen: SplashScreen,
-        private statusBar: StatusBar,
         public modalCtrl: ModalController,
         private menu: MenuController,
-        // private actionSheetCtrl: ActionSheetController,
-        // private popoverCtrl: PopoverController,
-        // private router: Router,
         public toastController: ToastController) {
         this.initializeApp();
     }
 
-    initializeApp() {
-        this.platform.ready().then(() => {
-            this.statusBar.styleDefault();
-            this.splashScreen.hide();
-        });
+    async initializeApp() {
+        const {SplashScreen, StatusBar} = Plugins;
         if (this.platform.is('android') || this.platform.is('ios')) {
+            await SplashScreen.hide();
+            await StatusBar.setStyle({ style: StatusBarStyle.Light });
             AdMob.initialize(environment.androidAppId);
             // Initialize BackButton Event.
             this.platform.backButton.subscribeWithPriority(10, () => {
