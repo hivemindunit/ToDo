@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">get-it-done</string>
-    <string name="title_activity_main">get-it-done</string>
+    <string name="app_name">Get It Done Ninja</string>
+    <string name="title_activity_main">Get It Done</string>
     <string name="package_name">com.atsimbalistov.getitdone</string>
     <string name="custom_url_scheme">com.atsimbalistov.getitdone</string>
 </resources>
