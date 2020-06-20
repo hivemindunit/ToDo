@@ -20,7 +20,7 @@
         <ion-progress-bar value="{{completedPercentage()}}"></ion-progress-bar>
     </ion-toolbar>
 </ion-header>
-<ion-content>
+<ion-content padding="true">
     <div *ngIf="todos">
         <ion-list>
             <ion-reorder-group (ionItemReorder)="doReorder($event)" disabled="{{!reorderEnabled}}">
@@ -104,5 +104,10 @@
             <ion-title size="small">Reorder</ion-title>
             <ion-toggle [(ngModel)]="reorderEnabled"></ion-toggle>
         </ion-buttons>
+    </ion-toolbar>
+</ion-footer>
+<ion-footer *ngIf="platform.is('android')" class="ion-no-border">
+    <ion-toolbar style="admobplaceholder">
+        <!--AdMob Banner Placeholder-->
     </ion-toolbar>
 </ion-footer>

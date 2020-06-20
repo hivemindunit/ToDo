@@ -9,3 +9,6 @@ ion-item.done {
   text-decoration: line-through;
   --ion-text-color: var(--ion-color-medium);
 }
+ion-toolbar.admobplaceholder {
+  max-height: 60px !important;
+}

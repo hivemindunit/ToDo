@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {Todo, TodoService} from '../shared/todo.service';
 import {AngularFireAuth} from '@angular/fire/auth';
+import {Platform} from '@ionic/angular';
 
 @Component({
   selector: 'app-archive',
@@ -12,7 +13,8 @@ export class ArchivePage {
   todos: Todo[];
   constructor(private router: Router,
               public ngFireAuth: AngularFireAuth,
-              private todoService: TodoService) {
+              private todoService: TodoService,
+              public platform: Platform) {
     this.ngFireAuth.authState.subscribe(user => {
       this.todoService.getTodos().subscribe(res => {
         this.todos = res;

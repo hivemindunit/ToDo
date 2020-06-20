@@ -11,5 +11,7 @@ export const environment = {
     appId: '1:348414221184:web:3b2ef94dae8d3a206fbf65',
     measurementId: 'G-C2FJ0JDRB9'
   },
-  dynamicLinkDomain: 'getitdone.page.link'
+  dynamicLinkDomain: 'getitdone.page.link',
+  androidAppId: 'com.atsimbalistov.getitdone',
+  androidListBottomAdId: 'ca-app-pub-5088902637790954/7671807667'
 };

@@ -15,7 +15,9 @@ export const environment = {
     appId: '1:469650996905:web:f1610b6d0a636dda47f3b8',
     measurementId: 'G-2PQQ5HBHMF'
   },
-  dynamicLinkDomain: 'getitdonetest.page.link'
+  dynamicLinkDomain: 'getitdonetest.page.link',
+  androidAppId: 'com.atsimbalistov.getitdone',
+  androidListBottomAdId: 'ca-app-pub-3940256099942544/6300978111' // test ads: https://developers.google.com/admob/android/test-ads
 };
 
 /*

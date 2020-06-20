@@ -5,6 +5,13 @@ import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {Router} from '@angular/router';
 import {ToastController} from '@ionic/angular';
+import { Plugins } from '@capacitor/core';
+import {environment} from '../environments/environment';
+import {cfaSignIn} from 'capacitor-firebase-auth';
+import {User} from './shared/user';
+import {auth} from 'firebase';
+
+const { AdMob } = Plugins;
 
 @Component({
     selector: 'app-root',
@@ -41,6 +48,9 @@ export class AppComponent {
             this.statusBar.styleDefault();
             this.splashScreen.hide();
         });
+        if (this.platform.is('android') || this.platform.is('ios')) {
+            AdMob.initialize(environment.androidAppId);
+        }
     }
 
     // active hardware back button

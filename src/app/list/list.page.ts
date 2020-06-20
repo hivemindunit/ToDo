@@ -1,5 +1,5 @@
-import {Component, ViewChild} from '@angular/core';
-import {IonReorderGroup, ModalController} from '@ionic/angular';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {IonReorderGroup, ModalController, Platform} from '@ionic/angular';
 import {Events} from '../events.service';
 import {ItemPage} from './item/item.page';
 import {Router} from '@angular/router';
@@ -7,6 +7,11 @@ import {Todo, TodoService} from '../shared/todo.service';
 import {AuthenticationService} from '../shared/authentication-service';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {ToastController} from '@ionic/angular';
+import {Plugins} from '@capacitor/core';
+import {AdOptions, AdSize, AdPosition} from 'capacitor-admob';
+import {environment} from '../../environments/environment';
+
+const { AdMob } = Plugins;
 
 @Component({
     selector: 'app-list-page',
@@ -14,11 +19,17 @@ import {ToastController} from '@ionic/angular';
     styleUrls: ['list.page.scss']
 })
 
-export class ListPage {
+export class ListPage implements OnInit {
     @ViewChild(IonReorderGroup, {static: true}) reorderGroup: IonReorderGroup;
     modal: any;
     todos: Todo[];
     reorderEnabled: true;
+
+    options: AdOptions = {
+        adId: environment.androidListBottomAdId,
+        adSize: AdSize.SMART_BANNER,
+        position: AdPosition.BOTTOM_CENTER
+    };
 
     constructor(public modalController: ModalController,
                 public events: Events,
@@ -26,7 +37,8 @@ export class ListPage {
                 public authService: AuthenticationService,
                 public ngFireAuth: AngularFireAuth,
                 private todoService: TodoService,
-                public toastController: ToastController) {
+                public toastController: ToastController,
+                public platform: Platform) {
         this.ngFireAuth.authState.subscribe(user => {
             if (user) {
                 this.todoService.getTodos().subscribe(res => {
@@ -36,6 +48,25 @@ export class ListPage {
                 router.navigate(['auth']);
             }
         });
+    }
+
+    ngOnInit(): void {
+        if (this.platform.is('android') || this.platform.is('ios')) {
+            AdMob.showBanner(this.options).then(
+                value => {
+                    console.log(value); // true
+                },
+                error => {
+                    console.error(error); // show error
+                }
+            );
+            // On ad failed to load
+            AdMob.addListener('onAdFailedToLoad', (info: any) => {
+                // You can call showInterstitial() here or anytime you want.
+                console.log('onAdFailedToLoad invoked');
+                console.log(info);
+            });
+        }
     }
 
     async modify(item) {
