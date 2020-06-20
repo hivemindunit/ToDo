@@ -62,7 +62,6 @@ export class ListPage implements OnInit {
             );
             // On ad failed to load
             AdMob.addListener('onAdFailedToLoad', (info: any) => {
-                // You can call showInterstitial() here or anytime you want.
                 console.log('onAdFailedToLoad invoked');
                 console.log(info);
             });
@@ -97,11 +96,11 @@ export class ListPage implements OnInit {
                         order: this.todos.length + 1
                     };
                     this.todoService.addTodo(newItem);
-                    this.notify('Item added');
+                    this.notify('Item added', false);
                 } else if (result.data.editItem) {
                     // ...or splice the items array if the modal passes back editItem
                     this.todoService.updateTodo(result.data.editItem, result.data.editItem.id);
-                    this.notify('Item updated');
+                    this.notify('Item updated', false);
                 }
                 this.modal.dismiss({
                     dismissed: true
@@ -116,27 +115,7 @@ export class ListPage implements OnInit {
             status: 'archived',
             archivedAt: new Date().getTime()
         }, id);
-        const toast = await this.toastController.create({
-            message: 'Item deleted',
-            duration: 2500,
-            buttons: [
-                {
-                    side: 'end',
-                    icon: 'refresh',
-                    role: 'cancel',
-                    text: 'Undo',
-                    handler: () => {
-                        this.todoService.getTodo(id).then(snapshot => {
-                            const item = snapshot.data() as Todo;
-                            delete item.doneAt;
-                            item.status = 'new';
-                            this.todoService.updateTodo(item, id);
-                        });
-                    }
-                }
-            ]
-        });
-        await toast.present();
+        await this.notify('Item deleted', true, id);
     }
 
     async toggleComplete(id) {
@@ -150,7 +129,7 @@ export class ListPage implements OnInit {
                 delete item.doneAt;
             }
         }
-        this.todoService.updateTodo(item, id);
+        await this.todoService.updateTodo(item, id);
     }
 
     async doReorder(ev: any) {
@@ -176,7 +155,7 @@ export class ListPage implements OnInit {
         for (let i = 0; i < ids.length; i++) {
             if (this.todos.find(x => x.id === ids[i]).order !== i) {
                 this.todoService.updateTodoAttributes({order: i}, ids[i]).then(r => {
-                    ev.detail.complete();
+                    // ev.detail.complete();
                 });
             }
         }
@@ -213,11 +192,35 @@ export class ListPage implements OnInit {
         }
     }
 
-    async notify(title: string) {
-        const toast = await this.toastController.create({
+    async notify(title: string, isUndo: boolean, itemId: string = null) {
+        let toastOptions = {
             message: title,
             duration: 1000
-        });
+        };
+        if (this.platform.is('android') || this.platform.is('ios')) {
+            toastOptions = {...toastOptions, ...{ position: 'middle' }};
+        }
+        if (isUndo) {
+            toastOptions.duration = 2500;
+            toastOptions = {...toastOptions, ...{
+                buttons: [
+                        {
+                            side: 'end',
+                            icon: 'refresh',
+                            role: 'cancel',
+                            text: 'Undo',
+                            handler: () => {
+                                this.todoService.getTodo(itemId).then(snapshot => {
+                                    const item = snapshot.data() as Todo;
+                                    delete item.doneAt;
+                                    item.status = 'new';
+                                    this.todoService.updateTodo(item, itemId);
+                                });
+                            }
+                        }
+                    ]}};
+        }
+        const toast = await this.toastController.create(toastOptions);
         await toast.present();
     }
 
