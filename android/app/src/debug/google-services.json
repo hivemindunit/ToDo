@@ -1,4 +1,4 @@
-
+{
   "project_info": {
     "project_number": "469650996905",
     "firebase_url": "https://todo-together-1588410185849.firebaseio.com",
@@ -8,18 +8,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:469650996905:android:9f807bb8d84267d647f3b8",
+        "mobilesdk_app_id": "1:469650996905:android:185a5a35c84e691447f3b8",
         "android_client_info": {
           "package_name": "com.atsimbalistov.getitdone"
         }
       },
       "oauth_client": [
         {
-          "client_id": "469650996905-1ubtprfq8g3hq713nihkc781j610jcqi.apps.googleusercontent.com",
+          "client_id": "469650996905-juvr22k2503q6cf3qggjpqmlsbodg04v.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.atsimbalistov.getitdone",
-            "certificate_hash": "067c1c68a1ad33076313a696f9adf10468cf5990"
+            "certificate_hash": "0c800b2bc80882a4fc442ac51dd7eca6097a188f"
           }
         },
         {

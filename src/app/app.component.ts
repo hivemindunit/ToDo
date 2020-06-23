@@ -30,7 +30,7 @@ export class AppComponent {
         const {SplashScreen, StatusBar} = Plugins;
         if (this.platform.is('android') || this.platform.is('ios')) {
             await SplashScreen.hide();
-            await StatusBar.setStyle({ style: StatusBarStyle.Light });
+            // await StatusBar.setStyle({ style: StatusBarStyle.Light });
             AdMob.initialize(environment.androidAppId);
             // Initialize BackButton Event.
             this.platform.backButton.subscribeWithPriority(10, () => {
