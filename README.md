@@ -12,8 +12,14 @@
 ```
 ionic serve
 ```
-### Production
+### Production Web
 ```
 npm run build:prod
 firebase deploy
+```
+### Production Android
+```
+ionic build --prod
+npx cap copy
+npx cap open android
 ```

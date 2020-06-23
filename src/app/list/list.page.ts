@@ -24,12 +24,14 @@ export class ListPage implements OnInit {
     modal: any;
     todos: Todo[];
     reorderEnabled: true;
+    adIsLoaded = false;
 
     options: AdOptions = {
         adId: environment.androidListBottomAdId,
         adSize: AdSize.SMART_BANNER,
         position: AdPosition.BOTTOM_CENTER
     };
+
 
     constructor(public modalController: ModalController,
                 public events: Events,
@@ -64,6 +66,9 @@ export class ListPage implements OnInit {
             AdMob.addListener('onAdFailedToLoad', (info: any) => {
                 console.log('onAdFailedToLoad invoked');
                 console.log(info);
+            });
+            AdMob.addListener('onAdLoaded', (info: any) => {
+                this.adIsLoaded = true;
             });
         }
     }

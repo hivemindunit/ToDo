@@ -106,7 +106,7 @@
         </ion-buttons>
     </ion-toolbar>
 </ion-footer>
-<ion-footer *ngIf="platform.is('android')" class="ion-no-border">
+<ion-footer *ngIf="platform.is('android') && adIsLoaded" class="ion-no-border">
     <ion-toolbar style="admobplaceholder">
         <!--AdMob Banner Placeholder-->
     </ion-toolbar>

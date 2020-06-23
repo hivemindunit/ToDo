@@ -1,7 +1,5 @@
 import {Component, QueryList, ViewChildren} from '@angular/core';
 import {Platform, IonRouterOutlet, ModalController, MenuController, ActionSheetController, PopoverController} from '@ionic/angular';
-import {SplashScreen} from '@ionic-native/splash-screen/ngx';
-import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {ToastController} from '@ionic/angular';
 import {Plugins, StatusBarStyle} from '@capacitor/core';
 import {environment} from '../environments/environment';
