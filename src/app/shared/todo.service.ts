@@ -24,11 +24,12 @@ export class TodoService {
   private todosCollection: AngularFirestoreCollection<Todo>;
   private todos: Observable<Todo[]>;
 
+  public batch: any;
+
   constructor(db: AngularFirestore, authService: AuthenticationService, private ngFireAuth: AngularFireAuth) {
     this.ngFireAuth.authState.subscribe(user => {
       if (user) {
         this.todosCollection = db.collection<Todo>('users/' + authService.userData.uid + '/todos', ref => ref.orderBy('order'));
-
         this.todos = this.todosCollection.snapshotChanges().pipe(
             map(actions => {
               return actions.map(a => {
@@ -38,6 +39,7 @@ export class TodoService {
               });
             })
         );
+        this.batch = db.firestore.batch();
         this.cleanUp();
       }
     });

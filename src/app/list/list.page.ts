@@ -44,7 +44,7 @@ export class ListPage implements OnInit {
         this.ngFireAuth.authState.subscribe(user => {
             if (user) {
                 this.todoService.getTodos().subscribe(res => {
-                    this.todos = res;
+                    this.todos = res.filter((o) => o.status !== 'archived');
                 });
             } else {
                 router.navigate(['auth']);
@@ -98,7 +98,7 @@ export class ListPage implements OnInit {
                         }),
                         createdAt: new Date().getTime(),
                         status: result.data.newItem.status,
-                        order: this.todos.length + 1
+                        order: this.todos.length
                     };
                     this.todoService.addTodo(newItem);
                     this.notify('Item added', false);
@@ -121,6 +121,7 @@ export class ListPage implements OnInit {
             archivedAt: new Date().getTime()
         }, id);
         await this.notify('Item archived', true, id);
+        this.recalculateOrder();
     }
 
     async toggleComplete(id) {
@@ -138,35 +139,21 @@ export class ListPage implements OnInit {
     }
 
     async doReorder(ev: any) {
-        // The `from` and `to` properties contain the index of the item
-        // when the drag started and ended, respectively
-        let fromIndex, toIndex;
-        const ids = this.todos.map(a => a.id);
-        // in some cases detail.from or detail.to exceeds array boundaries. The code below is to correct that
-        if (ev.detail.from > ids.length - 1) {
-            fromIndex = ids.length - 1;
-        } else {
-            fromIndex = ev.detail.from;
-        }
-        if (ev.detail.to > ids.length - 1) {
-            toIndex = ids.length - 1;
-        } else {
-            toIndex = ev.detail.to;
-        }
         // Moving target element to new place
-        const itemMove = ids.splice(fromIndex, 1)[0];
-        ids.splice(toIndex, 0, itemMove);
-        // Correcting orders according to the new order
-        for (let i = 0; i < ids.length; i++) {
-            if (this.todos.find(x => x.id === ids[i]).order !== i) {
-                this.todoService.updateTodoAttributes({order: i}, ids[i]).then(r => {
-                    // ev.detail.complete();
-                });
-            }
-        }
+        const itemMove = this.todos.splice(ev.detail.from, 1)[0];
+        this.todos.splice(ev.detail.to, 0, itemMove);
         // Finish the reorder and position the item in the DOM based on
         // where the gesture ended.
         ev.detail.complete();
+        this.recalculateOrder();
+    }
+
+    recalculateOrder() {
+        for (let i = 0; i < this.todos.length; i++) {
+            if (this.todos[i].order !== i) {
+                this.todoService.updateTodoAttributes({order: i}, this.todos[i].id);
+            }
+        }
     }
 
     isArchiveEmpty() {
@@ -191,7 +178,7 @@ export class ListPage implements OnInit {
 
     completedPercentage() {
         if (typeof(this.todos) !== 'undefined') {
-            return this.todos.filter((o) => o.status === 'complete').length / this.activeTodos().length;
+            return this.todos.filter((o) => o.status === 'complete').length / this.todos.length;
         } else {
             return 0;
         }
@@ -227,9 +214,5 @@ export class ListPage implements OnInit {
         }
         const toast = await this.toastController.create(toastOptions);
         await toast.present();
-    }
-
-    activeTodos() {
-        return this.todos.filter((o) => o.status !== 'archived');
     }
 }
