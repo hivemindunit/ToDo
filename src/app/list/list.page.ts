@@ -10,6 +10,8 @@ import {ToastController} from '@ionic/angular';
 import {Plugins} from '@capacitor/core';
 import {AdOptions, AdSize, AdPosition} from 'capacitor-admob';
 import {environment} from '../../environments/environment';
+import {AngularFireFunctions} from '@angular/fire/functions';
+import * as _ from 'lodash';
 
 const { AdMob } = Plugins;
 
@@ -25,13 +27,13 @@ export class ListPage implements OnInit {
     todos: Todo[];
     reorderEnabled: true;
     adIsLoaded = false;
+    reorderTasksCloudFn: any;
 
     options: AdOptions = {
         adId: environment.androidListBottomAdId,
         adSize: AdSize.SMART_BANNER,
         position: AdPosition.BOTTOM_CENTER
     };
-
 
     constructor(public modalController: ModalController,
                 public events: Events,
@@ -40,7 +42,8 @@ export class ListPage implements OnInit {
                 public ngFireAuth: AngularFireAuth,
                 private todoService: TodoService,
                 public toastController: ToastController,
-                public platform: Platform) {
+                public platform: Platform,
+                private fns: AngularFireFunctions) {
         this.ngFireAuth.authState.subscribe(user => {
             if (user) {
                 this.todoService.getTodos().subscribe(res => {
@@ -50,6 +53,11 @@ export class ListPage implements OnInit {
                 router.navigate(['auth']);
             }
         });
+        this.reorderTasksCloudFn = _.debounce((ids) => {
+            this.fns.httpsCallable('reorderTasks')({ids}).toPromise()
+                    .then((response) => console.log(response))
+                    .catch((err) => console.error('error', err));
+        }, 2000);
     }
 
     ngOnInit(): void {
@@ -144,8 +152,10 @@ export class ListPage implements OnInit {
         this.todos.splice(ev.detail.to, 0, itemMove);
         // Finish the reorder and position the item in the DOM based on
         // where the gesture ended.
+        const ids = this.todos.map(({ id }) => id);
+        // Call a cloud debounced function to save new order in database
+        this.reorderTasksCloudFn(ids);
         ev.detail.complete();
-        this.recalculateOrder();
     }
 
     recalculateOrder() {

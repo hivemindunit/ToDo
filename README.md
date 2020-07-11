@@ -12,10 +12,13 @@
 ```
 ionic serve
 ```
+### Staging Web
+```
+firebase use staging && cd functions && npm run build && cd .. && npm run build:prod && firebase deploy
+```
 ### Production Web
 ```
-npm run build:prod
-firebase deploy
+firebase use default && cd functions && npm run build && cd .. && npm run build:prod && firebase deploy
 ```
 ### Production Android
 ```

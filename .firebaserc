@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "get-it-done-5a34c"
+    "default": "get-it-done-5a34c",
+    "staging": "todo-together-1588410185849"
   }
 }
