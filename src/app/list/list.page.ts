@@ -25,6 +25,7 @@ export class ListPage implements OnInit {
     @ViewChild(IonReorderGroup, {static: true}) reorderGroup: IonReorderGroup;
     modal: any;
     todos: Todo[];
+    archivedTodos: Todo[];
     reorderEnabled: true;
     adIsLoaded = false;
     reorderTasksCloudFn: any;
@@ -48,6 +49,9 @@ export class ListPage implements OnInit {
             if (user) {
                 this.todoService.getTodos().subscribe(res => {
                     this.todos = res.filter((o) => o.status !== 'archived');
+                });
+                this.todoService.getTodos().subscribe(res => {
+                    this.archivedTodos = res.filter((o) => o.status === 'archived');
                 });
             } else {
                 router.navigate(['auth']);
@@ -167,8 +171,8 @@ export class ListPage implements OnInit {
     }
 
     isArchiveEmpty() {
-        if (this.todos) {
-            return this.todos.filter((o) => o.status === 'archived').length === 0;
+        if (this.archivedTodos) {
+            return this.archivedTodos.length === 0;
         } else {
             return true;
         }
@@ -176,7 +180,7 @@ export class ListPage implements OnInit {
 
     notDoneItemsCount() {
         if (this.todos) {
-            return this.todos.filter((o) => o.status === 'new').length;
+            return this.todos.length;
         } else {
             return 0;
         }

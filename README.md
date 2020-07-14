@@ -20,6 +20,11 @@ firebase use staging && cd functions && npm run build && cd .. && npm run build:
 ```
 firebase use default && cd functions && npm run build && cd .. && npm run build:prod && firebase deploy
 ```
+### Debuggung Android
+```
+ionic capacitor copy android
+npx cap open android
+```
 ### Production Android
 ```
 ionic build --prod
