@@ -2,5 +2,21 @@
   "projects": {
     "default": "get-it-done-5a34c",
     "staging": "todo-together-1588410185849"
+  },
+  "targets": {
+    "get-it-done-5a34c": {
+      "hosting": {
+        "app": [
+          "get-it-done-5a34c"
+        ]
+      }
+    },
+    "todo-together-1588410185849": {
+      "hosting": {
+        "app": [
+          "todo-together-1588410185849"
+        ]
+      }
+    }
   }
 }

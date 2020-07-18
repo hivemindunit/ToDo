@@ -55,17 +55,21 @@ export class AuthenticationService {
 
     // Login in with email/password
     SignIn(email, password) {
-        return this.ngFireAuth.auth.signInWithEmailAndPassword(email, password);
+        return this.ngFireAuth.signInWithEmailAndPassword(email, password);
     }
 
     // Register user with email/password
     RegisterUser(email, password) {
-        return this.ngFireAuth.auth.createUserWithEmailAndPassword(email, password);
+        return this.ngFireAuth.createUserWithEmailAndPassword(email, password);
     }
 
     // Email verification when new user register
     SendVerificationMail() {
-        return this.ngFireAuth.auth.currentUser.sendEmailVerification(this.actionCodeSettings);
+        return this.ngFireAuth.authState.subscribe(
+            (user) => user.sendEmailVerification());
+                // .then(
+                // () => console.log('email sent')));
+        // return this.ngFireAuth.sendEmailVerification(this.actionCodeSettings);
             // .then(() => {
             //     this.router.navigate(['verify-email']);
             // });
@@ -73,7 +77,7 @@ export class AuthenticationService {
 
     // Recover password
     PasswordRecover(passwordResetEmail) {
-        return this.ngFireAuth.auth.sendPasswordResetEmail(passwordResetEmail, this.actionCodeSettings)
+        return this.ngFireAuth.sendPasswordResetEmail(passwordResetEmail, this.actionCodeSettings)
             .then(() => {
                 // window.alert('Password reset email has been sent, please check your inbox.');
             }).catch((error) => {
@@ -108,7 +112,7 @@ export class AuthenticationService {
 
     // Auth providers
     AuthLogin(provider) {
-        return this.ngFireAuth.auth.signInWithPopup(provider)
+        return this.ngFireAuth.signInWithPopup(provider)
             .then((result) => {
                 this.ngZone.run(() => {
                     this.router.navigateByUrl('/');
@@ -139,7 +143,7 @@ export class AuthenticationService {
         if (this.platform.is('android') || this.platform.is('ios')) {
             cfaSignOut().subscribe();
         } else {
-            return this.ngFireAuth.auth.signOut().then(() => {
+            return this.ngFireAuth.signOut().then(() => {
                 localStorage.removeItem('user');
                 this.router.navigate(['login']);
             });

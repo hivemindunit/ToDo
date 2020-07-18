@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {IonReorderGroup, ModalController, Platform} from '@ionic/angular';
+import {IonProgressBar, IonReorderGroup, ModalController, Platform} from '@ionic/angular';
 import {Events} from '../events.service';
 import {ItemPage} from './item/item.page';
 import {Router} from '@angular/router';
@@ -23,10 +23,11 @@ const { AdMob } = Plugins;
 
 export class ListPage implements OnInit {
     @ViewChild(IonReorderGroup, {static: true}) reorderGroup: IonReorderGroup;
+    @ViewChild(IonProgressBar, {static: true}) progressBar: IonProgressBar;
     modal: any;
     todos: Todo[];
     archivedTodos: Todo[];
-    reorderEnabled: true;
+    reorderEnabled = true;
     adIsLoaded = false;
     reorderTasksCloudFn: any;
 
@@ -48,7 +49,9 @@ export class ListPage implements OnInit {
         this.ngFireAuth.authState.subscribe(user => {
             if (user) {
                 this.todoService.getTodos().subscribe(res => {
-                    this.todos = res.filter((o) => o.status !== 'archived');
+                    this.todos = res.filter((o) => o.status !== 'archived').sort(function(a, b){
+                        return a.order - b.order;
+                    });
                 });
                 this.todoService.getTodos().subscribe(res => {
                     this.archivedTodos = res.filter((o) => o.status === 'archived');
@@ -57,11 +60,24 @@ export class ListPage implements OnInit {
                 router.navigate(['auth']);
             }
         });
-        this.reorderTasksCloudFn = _.debounce((ids) => {
+        this.reorderTasksCloudFn = _.debounce(() => {
+            const ids = this.todos.map(({ id }) => id);
+            const reorderWasEnabled = this.reorderEnabled;
+            if (reorderWasEnabled) {
+                this.reorderEnabled = false;
+            }
+            this.progressBar.type = 'indeterminate';
+            // console.log(ids);
             this.fns.httpsCallable('reorderTasks')({ids}).toPromise()
-                    .then((response) => console.log(response))
+                    .then((response) => {
+                        console.log(response);
+                        if (reorderWasEnabled) {
+                            this.reorderEnabled = true;
+                        }
+                        this.progressBar.type = 'determinate';
+                    })
                     .catch((err) => console.error('error', err));
-        }, 2000);
+        }, 5000);
     }
 
     ngOnInit(): void {
@@ -156,9 +172,8 @@ export class ListPage implements OnInit {
         this.todos.splice(ev.detail.to, 0, itemMove);
         // Finish the reorder and position the item in the DOM based on
         // where the gesture ended.
-        const ids = this.todos.map(({ id }) => id);
         // Call a cloud debounced function to save new order in database
-        this.reorderTasksCloudFn(ids);
+        this.reorderTasksCloudFn();
         ev.detail.complete();
     }
 
