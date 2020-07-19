@@ -64,7 +64,7 @@ export class AuthenticationService {
     }
 
     // Email verification when new user register
-    SendVerificationMail() {
+    async SendVerificationMail() {
         return this.ngFireAuth.authState.subscribe(
             (user) => user.sendEmailVerification());
                 // .then(
