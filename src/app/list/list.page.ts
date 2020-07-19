@@ -27,7 +27,7 @@ export class ListPage implements OnInit {
     modal: any;
     todos: Todo[];
     archivedTodos: Todo[];
-    reorderEnabled = true;
+    reorderEnabled = false;
     adIsLoaded = false;
     reorderTasksCloudFn: any;
 
